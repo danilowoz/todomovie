@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <meta name="theme-color" content="#181818" />
-      <body className={koulen.className}>
+      <body className={koulen.variable}>
         <Header />
         <div className="app">
           <main>{children}</main>
