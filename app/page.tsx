@@ -1,5 +1,13 @@
+import { Search } from "@/components/Search";
 import { Stage } from "@/components/Stage";
+import { Tabs } from "@/components/Tabs";
 
 export default function Home() {
-  return <Stage>foo</Stage>;
+  return (
+    <Stage>
+      <Tabs />
+
+      <Search />
+    </Stage>
+  );
 }
