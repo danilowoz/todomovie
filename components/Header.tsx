@@ -11,7 +11,7 @@ export const Header: React.FC = () => {
           <h1>
             <span>Todo</span>MOVIE
           </h1>
-          <p>Don't skip one</p>
+          <p>Don&apos;t skip one</p>
         </div>
       </div>
     </header>
