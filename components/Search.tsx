@@ -22,6 +22,7 @@ export const Search = () => {
 
   async function search(query: string) {
     try {
+      // @ts-ignore
       const data = await cancellableFetch(createAPI({ search: query.trim() }));
 
       setResults(
