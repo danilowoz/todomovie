@@ -1,20 +1,16 @@
 "use client";
 
-import { Movie } from "@/utils/data";
+import { Movie, deleteMovie, toggleWatched } from "@/utils/data";
 import React, { useState, useEffect } from "react";
 import "./movie.css";
 // import Tooltip from './tooltip';
 
 export const MovieItem = ({
   data,
-  toggleWatched,
-  deleteMovie,
   watched,
 }: {
   data: Movie;
   watched: boolean;
-  toggleWatched: (imdbID: string) => void;
-  deleteMovie: (imdbID: string) => void;
 }) => {
   const [check, setCheck] = useState(false);
 

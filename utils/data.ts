@@ -48,21 +48,14 @@ export const insertMovie = async (movie: Movie) => {
     await ensureDatabase();
     const userID = await ensureUserID();
 
-    const currentMovie = await getMovieIDS();
-
-    if (currentMovie.length > 0) {
-      console.log(
-        await sql`
-        UPDATE users
-        SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}])
-        WHERE id = ${userID};
-`,
-      );
-    } else {
-      console.log(
-        await sql`INSERT INTO users (id, moviesIds) VALUES (${userID}, ARRAY[${movie.imdbid}]);`,
-      );
-    }
+    console.log(
+      await sql`
+INSERT INTO users (id, moviesIds) 
+VALUES (${userID}, ARRAY[${movie.imdbid}])
+ON CONFLICT (id) 
+DO UPDATE SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}]);
+      `,
+    );
 
     console.log(
       await sql`
@@ -84,10 +77,9 @@ export const ensureDatabase = async () => {
   try {
     // await sql`DROP TABLE IF EXISTS users;`;
     const user = await sql`CREATE TABLE IF NOT EXISTS users (
-          id VARCHAR(36) NOT NULL,
+          id VARCHAR(36) PRIMARY KEY,
           moviesIds VARCHAR(9)[]
-      );
-`;
+      );`;
 
     // await sql`DROP TABLE IF EXISTS movies;`;
     const movies = await sql`CREATE TABLE IF NOT EXISTS movies (
@@ -142,5 +134,36 @@ export const getMovies = async (): Promise<Movie[]> => {
   } catch (error) {
     console.log(error);
     return [];
+  }
+};
+
+export const deleteMovie = async (imdbid: string) => {
+  try {
+    const userID = await getUserID();
+
+    await sql`
+      UPDATE users
+      SET moviesIds = array_remove(moviesIds, ${imdbid})
+      WHERE id = ${userID};
+    `;
+
+    revalidatePath("/");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const toggleWatched = async (imdbid: string) => {
+  try {
+    const userID = await getUserID();
+
+    await sql`
+    UPDATE movies
+    SET watched = CASE WHEN watched THEN FALSE ELSE TRUE END
+    WHERE imdbid = ${imdbid};`;
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
   }
 };
