@@ -10,21 +10,28 @@ export const Tabs = () => {
   const [leftPosition, setLeftPosition] = useState(3);
   const [rightPosition, setRightPosition] = useState(140);
 
-  function setActiveItem({
+  function setPosition({
     currentTarget,
   }: {
     currentTarget: HTMLButtonElement;
   }) {
-    setCurrent(currentTarget.innerText);
-
     setLeftPosition(currentTarget.offsetLeft);
     setRightPosition(
       (currentTarget.parentElement?.offsetWidth ?? 0) -
         currentTarget.offsetLeft -
         currentTarget.offsetWidth,
     );
+  }
 
-    // preferences.update((prev) => ({ ...prev, tab: current }));
+  function setActiveItem({
+    currentTarget,
+  }: {
+    currentTarget: HTMLButtonElement;
+  }) {
+    setCurrent(currentTarget.innerText);
+    setPosition({ currentTarget });
+
+    window.localStorage.setItem("tab", currentTarget.innerText ?? "");
   }
 
   useLayoutEffect(() => {
@@ -33,7 +40,15 @@ export const Tabs = () => {
     );
 
     if (element) {
-      setActiveItem({ currentTarget: element });
+      setPosition({ currentTarget: element });
+    }
+  }, [current]);
+
+  useEffect(() => {
+    const tab = window.localStorage.getItem("tab");
+
+    if (tab) {
+      setCurrent(tab);
     }
   }, []);
 
