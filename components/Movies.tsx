@@ -1,19 +1,30 @@
 "use client";
 
-import { Movie } from "@/utils/data";
+import { Movie, deleteMovie, toggleWatched } from "@/utils/data";
 import { Welcome } from "./Welcome";
 import MovieItem from "./Movie";
 import { usePreference } from "@/utils/usePreference";
 import { sortedMovies } from "@/utils/movies";
+import { useOptimistic } from "react";
 
 export const Movies = ({ data }: { data: Movie[] }) => {
   const [preference] = usePreference();
-
   const movies = sortedMovies(data, preference);
-  const unwatchedMovies = movies.filter((movie) => !movie.watched);
-  const watchedMovies = movies.filter((movie) => movie.watched);
 
-  if (movies.length === 0) {
+  const [optimistic, setOptimistic] = useOptimistic(movies, (data, action) =>
+    data.map((movie) => {
+      if (movie.imdbid === action) {
+        return { ...movie, watched: !movie.watched };
+      }
+
+      return movie;
+    }),
+  );
+
+  const unwatchedMovies = optimistic.filter((movie) => !movie.watched);
+  const watchedMovies = optimistic.filter((movie) => movie.watched);
+
+  if (optimistic.length === 0) {
     return <Welcome />;
   }
 
@@ -31,14 +42,32 @@ export const Movies = ({ data }: { data: Movie[] }) => {
 
       <div className="movies container-padding">
         {unwatchedMovies.map((movie) => (
-          <MovieItem data={movie} key={movie.imdbid} watched={false} />
+          <MovieItem
+            toggleWatched={() => {
+              setOptimistic(movie.imdbid);
+              toggleWatched(movie.imdbid);
+            }}
+            deleteMovie={() => deleteMovie(movie.imdbid)}
+            data={movie}
+            key={movie.imdbid}
+            watched={false}
+          />
         ))}
 
         {watchedMovies.length > 0 && (
           <>
             <p className="movies-watched">Watched</p>
             {watchedMovies.map((movie) => (
-              <MovieItem data={movie} key={movie.imdbid} watched />
+              <MovieItem
+                toggleWatched={() => {
+                  setOptimistic(movie.imdbid);
+                  toggleWatched(movie.imdbid);
+                }}
+                deleteMovie={() => deleteMovie(movie.imdbid)}
+                data={movie}
+                key={movie.imdbid}
+                watched
+              />
             ))}
           </>
         )}

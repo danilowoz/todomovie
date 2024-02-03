@@ -71,6 +71,7 @@ body {
   width: 100vw;
   overflow-x: hidden;
   font-family: var(--font-normal);
+  position: relative;
 }
 
 body:before {

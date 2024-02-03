@@ -2,8 +2,7 @@
   h1 {
     text-align: center;
     font-weight: normal;
-    font-size: var(--size-large);
-    font-family: var(--font-heading);
+    font-size: var(--size-normal);
     color: var(--gray-12);
     margin-top: var(--space-7);
     margin-bottom: var(--space-2);
@@ -37,7 +36,6 @@
   td:last-child {
     color: var(--gray-11);
     font-weight: 400;
-    text-transform: uppercase;
   }
 }
 
