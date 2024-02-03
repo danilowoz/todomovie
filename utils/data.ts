@@ -1,9 +1,24 @@
 "use server";
 
-import { Movie } from "@/components/Search";
+import { revalidatePath } from "next/cache";
+
 import { sql } from "@vercel/postgres";
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
+
+export type Movie = {
+  title: string;
+  imdbid: string;
+  year: string;
+  poster: string;
+  genre: string;
+  imdbrating: string;
+  plot: string;
+  runtime: string;
+  director: string;
+  watched?: boolean;
+  added?: string;
+};
 
 const getUserID = async () => {
   const cookieStore = cookies();
@@ -29,28 +44,37 @@ const ensureUserID = async () => {
 };
 
 export const insertMovie = async (movie: Movie) => {
-  await ensureDatabase();
-  const userID = await ensureUserID();
-
   try {
+    await ensureDatabase();
+    const userID = await ensureUserID();
+
     const currentMovie = await getMovieIDS();
 
     if (currentMovie.length > 0) {
-      await sql`
+      console.log(
+        await sql`
         UPDATE users
-        SET movies = array_cat(users.movies, ARRAY[${movie.imdbID}])
+        SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}])
         WHERE id = ${userID};
-`;
+`,
+      );
     } else {
-      await sql`INSERT INTO users (id, movies) VALUES (${userID}, ARRAY[${movie.imdbID}]);`;
+      console.log(
+        await sql`INSERT INTO users (id, moviesIds) VALUES (${userID}, ARRAY[${movie.imdbid}]);`,
+      );
     }
 
-    await sql`
+    console.log(
+      await sql`
     INSERT INTO movies
-    (imdbID, Title, Year, Poster, imdbRating, Plot, Runtime, Director)
+    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, watched, added)
     VALUES
-    (${movie.imdbID}, ${movie.Title}, ${movie.Year}, ${movie.Poster}, ${movie.imdbRating}, ${movie.Plot}, ${movie.Runtime}, ${movie.Director});
-  `;
+    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, false, ${new Date().toString()})
+    ON CONFLICT (imdbid) DO NOTHING;
+  `,
+    );
+
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
   }
@@ -61,39 +85,44 @@ export const ensureDatabase = async () => {
     // await sql`DROP TABLE IF EXISTS users;`;
     const user = await sql`CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(36) NOT NULL,
-          movies VARCHAR(9)[]
+          moviesIds VARCHAR(9)[]
       );
 `;
 
     // await sql`DROP TABLE IF EXISTS movies;`;
     const movies = await sql`CREATE TABLE IF NOT EXISTS movies (
-        imdbID VARCHAR(9) PRIMARY KEY,
-        Title VARCHAR(355) NOT NULL,
-        Year VARCHAR(4),
-        Poster VARCHAR(355),
-        imdbRating VARCHAR(4),
-        Plot VARCHAR(355),
-        Runtime VARCHAR(355),
-        Director VARCHAR(355)
+        imdbid VARCHAR(9) PRIMARY KEY,
+        title VARCHAR(355) NOT NULL,
+        year VARCHAR(4),
+        poster VARCHAR(355),
+        imdbrating VARCHAR(4),
+        plot VARCHAR(355),
+        runtime VARCHAR(355),
+        director VARCHAR(355),
+        genre VARCHAR(355),
+        watched BOOLEAN,
+        added VARCHAR(355)
       );
 `;
 
-    return { user, movies };
+    console.log({ user, movies });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getMovieIDS = async () => {
+export const getMovieIDS = async (): Promise<string[]> => {
   try {
+    await ensureDatabase();
     const userID = await getUserID();
 
-    const result = await sql`
-      SELECT movies FROM users WHERE id = ${userID};
+    const result = await sql<{ moviesids: string[] }>`
+      SELECT moviesIds FROM users WHERE id = ${userID};
     `;
 
-    return result.rows[0].movies;
-  } catch {
+    return result.rows[0]?.moviesids ?? [];
+  } catch (error) {
+    console.log(error);
     return [];
   }
 };
@@ -102,11 +131,16 @@ export const getMovies = async (): Promise<Movie[]> => {
   try {
     const moviesIDs = await getMovieIDS();
 
+    if (moviesIDs.length === 0) {
+      return [];
+    }
+
     const result =
-      await sql<Movie>`SELECT * FROM movies WHERE imdbID = ANY(${moviesIDs});`;
+      await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesIDs});`;
 
     return result.rows;
   } catch (error) {
+    console.log(error);
     return [];
   }
 };

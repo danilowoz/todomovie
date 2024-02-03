@@ -3,18 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
 import { createCancellableFetch, createURL } from "../utils/fetch";
-import { insertMovie } from "@/utils/data";
-
-export type Movie = {
-  Title: string;
-  imdbID: string;
-  Year: string;
-  Poster: string;
-  imdbRating: string;
-  Plot: string;
-  Runtime: string;
-  Director: string;
-};
+import { Movie, insertMovie } from "@/utils/data";
 
 const cancellableFetch = createCancellableFetch();
 
@@ -58,16 +47,29 @@ export const Search = () => {
 
   async function addMovieToStore(imdbID: string) {
     try {
-      const fullMovie: Movie = await fetch(createURL({ imdbID })).then((res) =>
-        res.json(),
-      );
+      const fullMovie: {
+        Title: string;
+        imdbID: string;
+        Year: string;
+        Poster: string;
+        Genre: string;
+        imdbRating: string;
+        Plot: string;
+        Runtime: string;
+        Director: string;
+      } = await fetch(createURL({ imdbID })).then((res) => res.json());
 
-      await insertMovie(fullMovie);
-
-      // movies.update((prev) => [
-      //   ...prev,
-      //   { ...fullMovie, added: Date.now(), watched: false },
-      // ]);
+      await insertMovie({
+        imdbrating: fullMovie.imdbRating,
+        genre: fullMovie.Genre,
+        plot: fullMovie.Plot,
+        poster: fullMovie.Poster,
+        runtime: fullMovie.Runtime,
+        title: fullMovie.Title,
+        year: fullMovie.Year,
+        imdbid: fullMovie.imdbID,
+        director: fullMovie.Director,
+      });
     } catch (error) {
       // TODO
       console.error(error);
