@@ -43,7 +43,7 @@ const ensureUserID = async () => {
   }
 };
 
-const addMovie = async (movie: Movie) => {
+const addMovie = async (movie: Omit<Movie, "added">) => {
   const userID = await ensureUserID();
 
   await sql`
@@ -76,7 +76,7 @@ export const insertMovies = async (movies: Movie[]) => {
   }
 };
 
-export const insertMovie = async (movie: Movie) => {
+export const insertMovie = async (movie: Omit<Movie, "added">) => {
   try {
     await ensureDatabase();
     await addMovie(movie);

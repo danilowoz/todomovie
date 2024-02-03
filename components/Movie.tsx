@@ -2,6 +2,7 @@ import { Movie } from "@/utils/data";
 import React, { useState, useEffect } from "react";
 import "./movie.css";
 // import Tooltip from './tooltip';
+import { motion, Reorder, AnimatePresence } from "framer-motion";
 
 export const MovieItem = ({
   data,
@@ -33,7 +34,10 @@ export const MovieItem = ({
   };
 
   return (
-    <li
+    <motion.li
+      layout
+      exit={{ opacity: 0, y: 30 }}
+      transition={{ duration: 0.2 }}
       className={`movie-item ${check || watched ? "movie-item__watched" : ""} ${
         check ? "movie-item__checked" : ""
       }`}
@@ -77,7 +81,7 @@ export const MovieItem = ({
         </div>
         <p className="movie-item_description">{data.plot}</p>
       </div>
-    </li>
+    </motion.li>
   );
 };
 

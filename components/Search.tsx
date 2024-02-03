@@ -9,7 +9,7 @@ const cancellableFetch = createCancellableFetch();
 
 export const Search = () => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Movie[]>([]);
+  const [results, setResults] = useState<MovieRaw[]>([]);
   const [indexSelected, setIndexSelected] = useState(0);
   const timer = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -176,6 +176,7 @@ export const Search = () => {
 
                   {result.Year && (
                     <span className="app-search_result_year">
+                      {" "}
                       ({result.Year})
                     </span>
                   )}

@@ -6,6 +6,7 @@ import MovieItem from "./Movie";
 import { usePreference } from "@/utils/usePreference";
 import { sortedMovies } from "@/utils/movies";
 import { useOptimistic } from "react";
+import { motion, Reorder, AnimatePresence } from "framer-motion";
 
 export const Movies = ({ data }: { data: Movie[] }) => {
   const [preference] = usePreference();
@@ -41,36 +42,45 @@ export const Movies = ({ data }: { data: Movie[] }) => {
       )}
 
       <div className="movies container-padding">
-        {unwatchedMovies.map((movie) => (
-          <MovieItem
-            toggleWatched={() => {
-              setOptimistic(movie.imdbid);
-              toggleWatched(movie.imdbid);
-            }}
-            deleteMovie={() => deleteMovie(movie.imdbid)}
-            data={movie}
-            key={movie.imdbid}
-            watched={false}
-          />
-        ))}
+        <AnimatePresence>
+          {unwatchedMovies.map((movie) => (
+            <MovieItem
+              toggleWatched={() => {
+                setOptimistic(movie.imdbid);
+                toggleWatched(movie.imdbid);
+              }}
+              deleteMovie={() => deleteMovie(movie.imdbid)}
+              data={movie}
+              key={movie.imdbid}
+              watched={false}
+            />
+          ))}
 
-        {watchedMovies.length > 0 && (
-          <>
-            <p className="movies-watched">Watched</p>
-            {watchedMovies.map((movie) => (
-              <MovieItem
-                toggleWatched={() => {
-                  setOptimistic(movie.imdbid);
-                  toggleWatched(movie.imdbid);
-                }}
-                deleteMovie={() => deleteMovie(movie.imdbid)}
-                data={movie}
-                key={movie.imdbid}
-                watched
-              />
-            ))}
-          </>
-        )}
+          {watchedMovies.length > 0 && (
+            <>
+              <motion.p
+                exit={{ opacity: 0, y: 30 }}
+                layout
+                className="movies-watched"
+                transition={{ duration: 0.2 }}
+              >
+                Watched
+              </motion.p>
+              {watchedMovies.map((movie) => (
+                <MovieItem
+                  toggleWatched={() => {
+                    setOptimistic(movie.imdbid);
+                    toggleWatched(movie.imdbid);
+                  }}
+                  deleteMovie={() => deleteMovie(movie.imdbid)}
+                  data={movie}
+                  key={movie.imdbid}
+                  watched
+                />
+              ))}
+            </>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
