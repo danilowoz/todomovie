@@ -17,6 +17,18 @@ export function createURL({
   return url;
 }
 
+export type MovieRaw = {
+  Title: string;
+  imdbID: string;
+  Year: string;
+  Poster: string;
+  Genre: string;
+  imdbRating: string;
+  Plot: string;
+  Runtime: string;
+  Director: string;
+};
+
 export function createCancellableFetch() {
   let controller = new AbortController();
   let signal = controller.signal;

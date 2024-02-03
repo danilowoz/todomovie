@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
-import { createCancellableFetch, createURL } from "../utils/fetch";
+import { MovieRaw, createCancellableFetch, createURL } from "../utils/fetch";
 import { Movie, insertMovie } from "@/utils/data";
 
 const cancellableFetch = createCancellableFetch();
@@ -46,17 +46,9 @@ export const Search = () => {
 
   async function addMovieToStore(imdbID: string) {
     try {
-      const fullMovie: {
-        Title: string;
-        imdbID: string;
-        Year: string;
-        Poster: string;
-        Genre: string;
-        imdbRating: string;
-        Plot: string;
-        Runtime: string;
-        Director: string;
-      } = await fetch(createURL({ imdbID })).then((res) => res.json());
+      const fullMovie: MovieRaw = await fetch(createURL({ imdbID })).then(
+        (res) => res.json(),
+      );
 
       await insertMovie({
         imdbrating: fullMovie.imdbRating,

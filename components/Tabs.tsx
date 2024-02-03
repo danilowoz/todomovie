@@ -12,7 +12,9 @@ export const Tabs = () => {
 
   function setActiveItem({
     currentTarget,
-  }: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  }: {
+    currentTarget: HTMLButtonElement;
+  }) {
     setCurrent(currentTarget.innerText);
 
     setLeftPosition(currentTarget.offsetLeft);
@@ -25,15 +27,15 @@ export const Tabs = () => {
     // preferences.update((prev) => ({ ...prev, tab: current }));
   }
 
-  //   useLayoutEffect(() => {
-  //     const element: HTMLButtonElement | null = document.querySelector(
-  //       `.app-nav_item[data-tab-name="${current}"]`,
-  //     );
+  useLayoutEffect(() => {
+    const element: HTMLButtonElement | null = document.querySelector(
+      `.app-nav_item[data-tab-name="${current}"]`,
+    );
 
-  //     if (element) {
-  //       element.click?.();
-  //     }
-  //   }, []);
+    if (element) {
+      setActiveItem({ currentTarget: element });
+    }
+  }, []);
 
   return (
     <div className="app-nav_container">

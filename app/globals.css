@@ -113,11 +113,6 @@ input {
   }
 }
 
-.app {
-  position: relative;
-  min-height: 100vh;
-}
-
 .button {
   all: unset;
   cursor: pointer;
@@ -174,6 +169,12 @@ input {
     background: var(--gray-4);
     color: var(--gray-12);
     box-shadow: var(--shadow-action);
+  }
+
+  &:active {
+    border: 1px solid var(--gray-6);
+    background: var(--gray-5);
+    color: var(--gray-12);
   }
 }
 
