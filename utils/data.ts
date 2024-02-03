@@ -36,17 +36,16 @@ export const insertMovie = async (movie: Movie) => {
     const currentMovie = await getMovieIDS();
 
     if (currentMovie.length > 0) {
-      const resultUser = await sql`
+      await sql`
         UPDATE users
         SET movies = array_cat(users.movies, ARRAY[${movie.imdbID}])
         WHERE id = ${userID};
 `;
     } else {
-      const resultUser =
-        await sql`INSERT INTO users (id, movies) VALUES (${userID}, ARRAY[${movie.imdbID}]);`;
+      await sql`INSERT INTO users (id, movies) VALUES (${userID}, ARRAY[${movie.imdbID}]);`;
     }
 
-    const resultMovie = await sql`
+    await sql`
     INSERT INTO movies
     (imdbID, Title, Year, Poster, imdbRating, Plot, Runtime, Director)
     VALUES
@@ -95,6 +94,19 @@ export const getMovieIDS = async () => {
 
     return result.rows[0].movies;
   } catch {
+    return [];
+  }
+};
+
+export const getMovies = async (): Promise<Movie[]> => {
+  try {
+    const moviesIDs = await getMovieIDS();
+
+    const result =
+      await sql<Movie>`SELECT * FROM movies WHERE imdbID = ANY(${moviesIDs});`;
+
+    return result.rows;
+  } catch (error) {
     return [];
   }
 };
