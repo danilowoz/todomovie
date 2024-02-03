@@ -48,24 +48,20 @@ export const insertMovie = async (movie: Movie) => {
     await ensureDatabase();
     const userID = await ensureUserID();
 
-    console.log(
-      await sql`
-INSERT INTO users (id, moviesIds) 
-VALUES (${userID}, ARRAY[${movie.imdbid}])
-ON CONFLICT (id) 
-DO UPDATE SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}]);
-      `,
-    );
+    await sql`
+    INSERT INTO users (id, moviesIds) 
+    VALUES (${userID}, ARRAY[${movie.imdbid}])
+    ON CONFLICT (id) 
+    DO UPDATE SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}]);
+      `;
 
-    console.log(
-      await sql`
+    await sql`
     INSERT INTO movies
-    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, watched, added)
+    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, added)
     VALUES
-    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, false, ${new Date().toString()})
+    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, ${new Date().toString()})
     ON CONFLICT (imdbid) DO NOTHING;
-  `,
-    );
+  `;
 
     revalidatePath("/");
   } catch (error) {
@@ -76,13 +72,14 @@ DO UPDATE SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}]);
 export const ensureDatabase = async () => {
   try {
     // await sql`DROP TABLE IF EXISTS users;`;
-    const user = await sql`CREATE TABLE IF NOT EXISTS users (
+    await sql`CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(36) PRIMARY KEY,
-          moviesIds VARCHAR(9)[]
+          moviesIds VARCHAR(9)[],
+          watchedMoviesIds VARCHAR(9)[]
       );`;
 
     // await sql`DROP TABLE IF EXISTS movies;`;
-    const movies = await sql`CREATE TABLE IF NOT EXISTS movies (
+    await sql`CREATE TABLE IF NOT EXISTS movies (
         imdbid VARCHAR(9) PRIMARY KEY,
         title VARCHAR(355) NOT NULL,
         year VARCHAR(4),
@@ -92,27 +89,38 @@ export const ensureDatabase = async () => {
         runtime VARCHAR(355),
         director VARCHAR(355),
         genre VARCHAR(355),
-        watched BOOLEAN,
         added VARCHAR(355)
       );
 `;
-
-    console.log({ user, movies });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getMovieIDS = async (): Promise<string[]> => {
+const getMovieIDS = async (): Promise<string[]> => {
   try {
     await ensureDatabase();
     const userID = await getUserID();
 
-    const result = await sql<{ moviesids: string[] }>`
+    const resultMovies = await sql<{ moviesids: string[] }>`
       SELECT moviesIds FROM users WHERE id = ${userID};
     `;
+    return resultMovies.rows[0]?.moviesids ?? [];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
 
-    return result.rows[0]?.moviesids ?? [];
+const getWatchedMovieIDS = async (): Promise<string[]> => {
+  try {
+    await ensureDatabase();
+    const userID = await getUserID();
+
+    const resultMovies = await sql<{ watchedmoviesids: string[] }>`
+      SELECT watchedMoviesIds FROM users WHERE id = ${userID};
+    `;
+    return resultMovies.rows[0]?.watchedmoviesids ?? [];
   } catch (error) {
     console.log(error);
     return [];
@@ -122,15 +130,19 @@ export const getMovieIDS = async (): Promise<string[]> => {
 export const getMovies = async (): Promise<Movie[]> => {
   try {
     const moviesIDs = await getMovieIDS();
+    const watchedMoviesIds = await getWatchedMovieIDS();
 
-    if (moviesIDs.length === 0) {
+    if (moviesIDs.length === 0 && watchedMoviesIds.length === 0) {
       return [];
     }
 
-    const result =
+    const movies =
       await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesIDs});`;
 
-    return result.rows;
+    return movies.rows.map((m) => ({
+      ...m,
+      watched: watchedMoviesIds.includes(m.imdbid),
+    }));
   } catch (error) {
     console.log(error);
     return [];
@@ -141,6 +153,7 @@ export const deleteMovie = async (imdbid: string) => {
   try {
     const userID = await getUserID();
 
+    // TODO
     await sql`
       UPDATE users
       SET moviesIds = array_remove(moviesIds, ${imdbid})
@@ -156,11 +169,21 @@ export const deleteMovie = async (imdbid: string) => {
 export const toggleWatched = async (imdbid: string) => {
   try {
     const userID = await getUserID();
+    const watchedMoviesIds = await getWatchedMovieIDS();
 
-    await sql`
-    UPDATE movies
-    SET watched = CASE WHEN watched THEN FALSE ELSE TRUE END
-    WHERE imdbid = ${imdbid};`;
+    const watched = watchedMoviesIds.includes(imdbid);
+
+    if (watched) {
+      await sql`UPDATE users
+        SET watchedMoviesIds = array(SELECT unnest(users.watchedMoviesIds) EXCEPT SELECT ${imdbid})
+    WHERE users.id = ${userID};
+    `;
+    } else {
+      await sql`UPDATE users
+    SET watchedMoviesIds = array_cat(users.watchedMoviesIds, ARRAY[${imdbid}])
+    WHERE users.id = ${userID};
+    `;
+    }
 
     revalidatePath("/");
   } catch (error) {
