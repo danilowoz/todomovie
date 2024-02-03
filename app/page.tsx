@@ -1,3 +1,4 @@
+import { Export } from "@/components/Export";
 import { Movies } from "@/components/Movies";
 import { Search } from "@/components/Search";
 import { Tabs } from "@/components/Tabs";
@@ -9,6 +10,7 @@ export default async function Home() {
   return (
     <>
       <Tabs />
+      <Export data={movies} />
       <Search />
       <Movies data={movies} />
     </>

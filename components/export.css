@@ -1,0 +1,60 @@
+.export-button {
+  position: absolute;
+  right: var(--space-3);
+  top: calc(var(--space-3) + 3px);
+
+  width: var(--space-4);
+  padding: 0;
+
+  & svg {
+    width: 100%;
+    position: absolute;
+    top: 5px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .export-button {
+    right: var(--space-4);
+    top: var(--space-4);
+  }
+}
+
+.notification {
+  position: fixed;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gray-12);
+  color: var(--gray-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--rounded);
+
+  animation: slideIn 500ms var(--t-func);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.notification.slide-out {
+  animation: slideOut 500ms var(--t-func) forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    bottom: -50%;
+  }
+
+  100% {
+    bottom: var(--space-3);
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    bottom: var(--space-3);
+  }
+  100% {
+    bottom: -50%;
+  }
+}

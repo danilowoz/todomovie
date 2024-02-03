@@ -17,7 +17,7 @@ export type Movie = {
   runtime: string;
   director: string;
   watched?: boolean;
-  added?: string;
+  added: string;
 };
 
 const getUserID = async () => {

@@ -8,6 +8,7 @@ export const sortedMovies = (
   switch (preference) {
     case "Last added":
       return movies.sort((a, b) => {
+        // @ts-ignore
         return new Date(b.added) - new Date(a.added);
       });
 
