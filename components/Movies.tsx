@@ -1,10 +1,15 @@
-import { getMovies } from "@/utils/data";
+"use client";
+
+import { Movie } from "@/utils/data";
 import { Welcome } from "./Welcome";
 import MovieItem from "./Movie";
+import { usePreference } from "@/utils/usePreference";
+import { sortedMovies } from "@/utils/movies";
 
-export const Movies = async () => {
-  const movies = await getMovies();
+export const Movies = ({ data }: { data: Movie[] }) => {
+  const [preference] = usePreference();
 
+  const movies = sortedMovies(data, preference);
   const unwatchedMovies = movies.filter((movie) => !movie.watched);
   const watchedMovies = movies.filter((movie) => movie.watched);
 
@@ -17,7 +22,7 @@ export const Movies = async () => {
       {watchedMovies.length > 0 && unwatchedMovies.length === 0 && (
         <div className="movies-done">
           <div>
-            <p>And that's all I have to say about that.</p>
+            <p>And that&apos;s all I have to say about that.</p>
 
             <small>Forrest Gump</small>
           </div>
