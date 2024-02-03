@@ -1,7 +1,7 @@
-import { getMovies } from "@/utils/data";
+import { getMovieIDS } from "@/utils/data";
 
 export const Movies = async () => {
-  await getMovies();
+  const movies = await getMovieIDS();
 
-  return <div></div>;
+  return <div>{JSON.stringify(movies)}</div>;
 };

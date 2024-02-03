@@ -9,8 +9,11 @@ export type Movie = {
   Title: string;
   imdbID: string;
   Year: string;
-  Type: string;
   Poster: string;
+  imdbRating: string;
+  Plot: string;
+  Runtime: string;
+  Director: string;
 };
 
 const cancellableFetch = createCancellableFetch();
@@ -59,7 +62,7 @@ export const Search = () => {
         res.json(),
       );
 
-      insertMovie(fullMovie);
+      await insertMovie(fullMovie);
 
       // movies.update((prev) => [
       //   ...prev,
@@ -86,8 +89,6 @@ export const Search = () => {
   const keyHandler = useCallback(
     (event: KeyboardEvent) => {
       const { code } = event;
-
-      console.log(code);
 
       switch (code) {
         case "Enter":
