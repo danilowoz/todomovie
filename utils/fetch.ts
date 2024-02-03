@@ -1,10 +1,10 @@
-export function createAPI({
+export function createURL({
   search,
   imdbID,
 }: {
   search?: string;
   imdbID?: string;
-}) {
+}): URL {
   const url = new URL(`https://www.omdbapi.com/`);
   url.searchParams.set("apikey", "7ab33eb9");
 
@@ -21,7 +21,7 @@ export function createCancellableFetch() {
   let controller = new AbortController();
   let signal = controller.signal;
 
-  return async function mainCancellableFetch(url: string) {
+  return async function mainCancellableFetch(url: URL) {
     controller.abort();
 
     // reassign signal

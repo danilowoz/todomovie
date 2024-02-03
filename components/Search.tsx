@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
-import { createCancellableFetch, createAPI } from "../utils/fetch";
+import { createCancellableFetch, createURL } from "../utils/fetch";
+import { insertMovie } from "@/utils/data";
 
-type Movie = {
+export type Movie = {
   Title: string;
   imdbID: string;
   Year: string;
@@ -19,31 +20,46 @@ export const Search = () => {
   const [results, setResults] = useState<Movie[]>([]);
   const [indexSelected, setIndexSelected] = useState(0);
   const timer = useRef<NodeJS.Timeout>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  async function search(query: string) {
-    try {
-      // @ts-ignore
-      const data = await cancellableFetch(createAPI({ search: query.trim() }));
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        console.log(query);
+        const data = await cancellableFetch(
+          createURL({ search: query.trim() }),
+        );
 
-      setResults(
-        data.Search ?? [],
-        // data.Search
-        //   ? data.Search.filter(
-        //       (movie) => !$movies.find((m) => m.imdbID === movie.imdbID),
-        //     ).slice(0, 6)
-        //   : [],
-      );
-    } catch (error) {
-      // TODO
-      console.error(error);
+        setResults(
+          data.Search.slice(0, 6) ?? [],
+          // data.Search
+          //   ? data.Search.filter(
+          //       (movie) => !$movies.find((m) => m.imdbID === movie.imdbID),
+          //     ).slice(0, 6)
+          //   : [],
+        );
+      } catch (error) {
+        // TODO
+        console.error(error);
+      }
+    };
+
+    if (timer.current) {
+      clearTimeout(timer.current);
     }
-  }
+
+    timer.current = setTimeout(() => {
+      fetchMovies();
+    }, 500);
+  }, [query]);
 
   async function addMovieToStore(imdbID: string) {
     try {
-      const fullMovie = await fetch(createAPI({ imdbID })).then((res) =>
+      const fullMovie: Movie = await fetch(createURL({ imdbID })).then((res) =>
         res.json(),
       );
+
+      insertMovie(fullMovie);
 
       // movies.update((prev) => [
       //   ...prev,
@@ -67,60 +83,60 @@ export const Search = () => {
     setIndexSelected(0);
   }
 
-  function keyHandler(event: KeyboardEvent) {
-    const { code } = event;
+  const keyHandler = useCallback(
+    (event: KeyboardEvent) => {
+      const { code } = event;
 
-    switch (code) {
-      case "Enter":
-      case "Tab": {
-        selectMovie(results[indexSelected].imdbID);
-        event.preventDefault();
-        break;
-      }
-      case "Escape": {
-        resetInterfaceState();
-        break;
-      }
+      console.log(code);
 
-      case "ArrowUp": {
-        if (indexSelected !== 0) {
-          setIndexSelected(indexSelected - 1);
+      switch (code) {
+        case "Enter":
+        case "Tab": {
+          selectMovie(results[indexSelected].imdbID);
+          event.preventDefault();
+          break;
         }
-        event.preventDefault();
-        break;
-      }
-      case "ArrowDown": {
-        if (indexSelected !== results.length - 1) {
-          setIndexSelected(indexSelected + 1);
+        case "Escape": {
+          resetInterfaceState();
+          break;
         }
-        event.preventDefault();
-        break;
+
+        case "ArrowUp": {
+          setIndexSelected((prev) => {
+            return prev !== 0 ? prev - 1 : prev;
+          });
+
+          event.preventDefault();
+          break;
+        }
+        case "ArrowDown": {
+          setIndexSelected((prev) => {
+            return prev !== results.length - 1 ? prev + 1 : prev;
+          });
+
+          event.preventDefault();
+          break;
+        }
+
+        default:
+          break;
       }
+    },
+    [results, indexSelected, selectMovie],
+  );
 
-      default:
-        break;
-    }
-  }
-
-  function onSearchFocus() {
-    window.addEventListener("keydown", keyHandler);
-  }
-
-  function disposeKeyHandler() {
-    window.removeEventListener("keydown", keyHandler);
-  }
-
-  function onInput({ target }: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(target.value);
-
-    if (timer.current) {
-      clearTimeout(timer.current);
+  useEffect(() => {
+    const input = inputRef.current;
+    if (input) {
+      window.addEventListener("keydown", keyHandler);
     }
 
-    timer.current = setTimeout(() => {
-      search(query);
-    }, 400);
-  }
+    return () => {
+      if (input) {
+        window.removeEventListener("keydown", keyHandler);
+      }
+    };
+  }, [keyHandler]);
 
   return (
     <div
@@ -129,11 +145,10 @@ export const Search = () => {
       //   on:click_outside={resetInterfaceState}
     >
       <input
+        ref={inputRef}
         className="app-search"
         value={query}
-        onChange={onInput}
-        onFocus={onSearchFocus}
-        onBlur={disposeKeyHandler}
+        onChange={({ target }) => setQuery(target.value)}
         type="search"
         placeholder="Search..."
       />
@@ -149,7 +164,7 @@ export const Search = () => {
               return (
                 <div
                   key={result.imdbID}
-                  className={`app-search_result ${index === indexSelected ? "selected" : ""}`}
+                  className={`app-search_result ${index === indexSelected ? "app-search_result--selected" : ""}`}
                   onClick={() => {
                     selectMovie(result.imdbID);
                   }}
