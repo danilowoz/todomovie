@@ -17,6 +17,8 @@ export const Search = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
+        if (!query) return;
+
         const data = await cancellableFetch(
           createURL({ search: query.trim() }),
         );

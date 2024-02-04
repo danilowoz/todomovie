@@ -39,6 +39,12 @@
   }
 }
 
+@media screen and (min-width: 1024px) {
+  .app-nav:before {
+    right: var(--right, 184px);
+  }
+}
+
 .app-nav_item {
   background: none;
   border: 0;

@@ -10,8 +10,8 @@ import {
 
 export const Tabs = () => {
   const [preference, setPreference] = usePreference();
-  const [leftPosition, setLeftPosition] = useState(3);
-  const [rightPosition, setRightPosition] = useState(140);
+  const [leftPosition, setLeftPosition] = useState<number | undefined>();
+  const [rightPosition, setRightPosition] = useState<number | undefined>();
 
   function setPosition({
     currentTarget,
@@ -50,10 +50,12 @@ export const Tabs = () => {
       <nav
         className="app-nav"
         style={
-          {
-            "--left": `${leftPosition}px`,
-            "--right": `${rightPosition}px`,
-          } as CSSProperties
+          leftPosition
+            ? ({
+                "--left": `${leftPosition}px`,
+                "--right": `${rightPosition}px`,
+              } as CSSProperties)
+            : {}
         }
       >
         {PREFERENCE_ITEMS.map((item) => (

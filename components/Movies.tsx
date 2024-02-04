@@ -5,28 +5,49 @@ import { Welcome } from "./Welcome";
 import MovieItem from "./Movie";
 import { usePreference } from "@/utils/usePreference";
 import { sortedMovies } from "@/utils/movies";
-import { useOptimistic } from "react";
-import { motion, Reorder, AnimatePresence } from "framer-motion";
+import { useOptimistic, startTransition } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Movies = ({ data }: { data: Movie[] }) => {
   const [preference] = usePreference();
   const movies = sortedMovies(data, preference);
 
-  const [optimistic, setOptimistic] = useOptimistic(movies, (data, action) =>
-    data.map((movie) => {
-      if (movie.imdbid === action) {
+  const [optimistic, setOptimistic] = useOptimistic<
+    Movie[],
+    { action: "toggle" | "delete"; id: string }
+  >(movies, (prevData, action) => {
+    if (action.action === "delete") {
+      return prevData.filter((movie) => movie.imdbid !== action.id);
+    }
+
+    return prevData.map((movie) => {
+      if (movie.imdbid === action.id) {
         return { ...movie, watched: !movie.watched };
       }
 
       return movie;
-    }),
-  );
+    });
+  });
 
   const unwatchedMovies = optimistic.filter((movie) => !movie.watched);
   const watchedMovies = optimistic.filter((movie) => movie.watched);
 
   if (optimistic.length === 0) {
     return <Welcome />;
+  }
+
+  function handleDeleteMovie(id: string) {
+    startTransition(() => {
+      setOptimistic({ id, action: "delete" });
+    });
+    deleteMovie(id);
+  }
+
+  function handleToggleMovie(id: string) {
+    startTransition(() => {
+      setOptimistic({ id, action: "toggle" });
+    });
+    toggleWatched(id);
   }
 
   return (
@@ -45,11 +66,8 @@ export const Movies = ({ data }: { data: Movie[] }) => {
         <AnimatePresence>
           {unwatchedMovies.map((movie) => (
             <MovieItem
-              toggleWatched={() => {
-                setOptimistic(movie.imdbid);
-                toggleWatched(movie.imdbid);
-              }}
-              deleteMovie={() => deleteMovie(movie.imdbid)}
+              toggleWatched={() => handleToggleMovie(movie.imdbid)}
+              deleteMovie={() => handleDeleteMovie(movie.imdbid)}
               data={movie}
               key={movie.imdbid}
               watched={false}
@@ -68,11 +86,8 @@ export const Movies = ({ data }: { data: Movie[] }) => {
               </motion.p>
               {watchedMovies.map((movie) => (
                 <MovieItem
-                  toggleWatched={() => {
-                    setOptimistic(movie.imdbid);
-                    toggleWatched(movie.imdbid);
-                  }}
-                  deleteMovie={() => deleteMovie(movie.imdbid)}
+                  toggleWatched={() => handleToggleMovie(movie.imdbid)}
+                  deleteMovie={() => handleDeleteMovie(movie.imdbid)}
                   data={movie}
                   key={movie.imdbid}
                   watched
