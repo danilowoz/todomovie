@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./movie.css";
 // import Tooltip from './tooltip';
 import { motion, Reorder, AnimatePresence } from "framer-motion";
+import { Tooltip } from "./Tooltip";
 
 export const MovieItem = ({
   data,
@@ -49,21 +50,25 @@ export const MovieItem = ({
           className="button movie-item_actions movie-item_check-button"
           onClick={handleCheckClick}
         >
-          {/* <Tooltip delay={800} text={`Mark as ${data.watched ? 'not watched' : 'watched'}`}> */}
-          <img
-            src={data.watched ? "/eye.svg" : "/check.svg"}
-            alt={data.watched ? "Mark as not watched" : "Watched"}
-          />
-          {/* </Tooltip> */}
+          <Tooltip
+            trigger={
+              <img
+                src={data.watched ? "/eye.svg" : "/check.svg"}
+                alt={data.watched ? "Mark as not watched" : "Watched"}
+              />
+            }
+          >
+            Mark as {data.watched ? "not watched" : "watched"}
+          </Tooltip>
         </button>
 
         <button
           className="button movie-item_actions"
           onClick={() => deleteMovie(data.imdbid)}
         >
-          {/* <Tooltip delay={800} text="Delete"> */}
-          <img src="/delete.svg" alt="Delete" />
-          {/* </Tooltip> */}
+          <Tooltip trigger={<img src="/delete.svg" alt="Delete" />}>
+            Delete
+          </Tooltip>
         </button>
       </div>
 
