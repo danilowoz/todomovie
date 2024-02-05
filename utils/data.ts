@@ -62,7 +62,7 @@ const addMovie = async (movie: Omit<Movie, "added">) => {
   `;
 };
 
-export const insertMovies = async (movies: Movie[]) => {
+export const insertMovies = async (movies: Omit<Movie, "added">[]) => {
   try {
     await ensureDatabase();
 

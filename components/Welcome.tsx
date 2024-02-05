@@ -1,25 +1,6 @@
-"use client";
-
 import "./welcome.css";
-import oscar from "./oscar.json";
-import { insertMovies } from "@/utils/data";
 
-export const Welcome = () => {
-  function addToList() {
-    insertMovies(
-      oscar.map((item) => ({
-        director: item.Director,
-        genre: item.Genre,
-        plot: item.Plot,
-        poster: item.Poster,
-        title: item.Title,
-        year: item.Year,
-        imdbrating: item.imdbRating,
-        imdbid: item.imdbID,
-        runtime: item.Runtime,
-      })),
-    );
-  }
+export const Welcome = ({ onAddMovies }: { onAddMovies: () => void }) => {
   return (
     <div className="container-padding welcome">
       <div className="welcome-image">
@@ -40,7 +21,7 @@ export const Welcome = () => {
           </p>
 
           <div>
-            <button onClick={addToList} className="button button-primary">
+            <button onClick={onAddMovies} className="button button-primary">
               <svg
                 width="15"
                 height="15"
