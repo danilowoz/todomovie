@@ -69,7 +69,7 @@ export default async function Credits() {
 
         <tr>
           <td>Frontend Framework</td>
-          <td>NextJS</td>
+          <td>Next.js</td>
         </tr>
 
         <tr>

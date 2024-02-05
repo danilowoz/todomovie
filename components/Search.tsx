@@ -36,7 +36,7 @@ export const Search = ({
           rawMovies.Search
             ? rawMovies.Search.filter(
                 (rawItem) => !data.find((m) => m.imdbid === rawItem.imdbID),
-              ).slice(0, 6)
+              ).slice(0, 7)
             : [],
         );
       } catch (error) {
@@ -69,8 +69,11 @@ export const Search = ({
         year: fullMovie.Year,
         imdbid: fullMovie.imdbID,
         director: fullMovie.Director,
+        country: fullMovie.Country,
         added: new Date().toString(),
       });
+
+      resetInterfaceState();
     } catch (error) {
       console.error(error);
     }

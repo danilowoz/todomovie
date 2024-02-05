@@ -16,6 +16,7 @@ export type Movie = {
   plot: string;
   runtime: string;
   director: string;
+  country: string;
   watched?: boolean;
   added: string;
 };
@@ -28,21 +29,17 @@ export const getUserID = async () => {
 };
 
 const ensureUserID = async () => {
-  try {
-    const userID = await getUserID();
+  const userID = await getUserID();
 
-    if (!userID) {
-      const cookieStore = cookies();
-      const userId = uuidv4();
-      cookieStore.set("user-id", userId);
+  if (!userID) {
+    const cookieStore = cookies();
+    const userId = uuidv4();
+    cookieStore.set("user-id", userId);
 
-      return userId;
-    }
-
-    return userID;
-  } catch {
-    return null;
+    return userId;
   }
+
+  return userID;
 };
 
 const addMovie = async (movie: Omit<Movie, "added">) => {
@@ -57,9 +54,9 @@ const addMovie = async (movie: Omit<Movie, "added">) => {
 
   await sql`
     INSERT INTO movies
-    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, added)
+    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, country, added)
     VALUES
-    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, ${new Date().toString()})
+    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, ${movie.country}, ${new Date().toString()})
     ON CONFLICT (imdbid) DO NOTHING;
   `;
 };
@@ -101,6 +98,7 @@ export const ensureDatabase = async () => {
         runtime VARCHAR(355),
         director VARCHAR(355),
         genre VARCHAR(355),
+        country VARCHAR(355),
         added VARCHAR(355)
       );
 `,

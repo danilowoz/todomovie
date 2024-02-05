@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./movie.css";
 import { motion, AnimationProps } from "framer-motion";
 import { Tooltip } from "./Tooltip";
+import { flag } from "country-emoji";
 
 export const MovieItem = ({
   data,
@@ -87,6 +88,9 @@ export const MovieItem = ({
           <p className="movie-item_metadata only-desktop">{data.genre}</p>
           <p className="movie-item_metadata">{data.year}</p>
           <p className="movie-item_metadata only-mobile">{data.imdbrating}</p>
+          <p className="movie-item_metadata only-desktop">
+            {data.country.split(", ").map(flag).join(" ")}
+          </p>
         </div>
         <p className="movie-item_description">{data.plot}</p>
       </div>

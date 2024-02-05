@@ -18,7 +18,7 @@ export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
           </h1>
           <p>
             Not sure where to start? Start searching or check out the list of
-            Oscar-nominated movies.
+            Best Picture Oscar-nominated movies.
           </p>
 
           <div>

@@ -56,7 +56,7 @@
 
   box-sizing: border-box;
   width: 100%;
-  height: calc(var(--space-1) * 2 + 34px * 6);
+  height: calc(var(--space-1) * 2 + 34px * 7);
   padding: var(--space-1);
 
   box-shadow:
@@ -69,7 +69,7 @@
 
 @media screen and (min-width: 768px) {
   .app-search_results {
-    height: calc(var(--space-1) * 2 + 36px * 6);
+    height: calc(var(--space-1) * 2 + 36px * 7);
   }
 }
 

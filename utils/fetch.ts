@@ -27,6 +27,7 @@ export type MovieRaw = {
   Plot: string;
   Runtime: string;
   Director: string;
+  Country: string;
 };
 
 export function createCancellableFetch() {

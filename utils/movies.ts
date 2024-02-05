@@ -12,10 +12,10 @@ export const sortedMovies = (movies: Movie[], preference: Preference) => {
     case "Year":
       return movies.sort((a, b) => {
         if (Number(a.year) > Number(b.year)) {
-          return -1;
+          return 1;
         }
         if (Number(a.year) < Number(b.year)) {
-          return 1;
+          return -1;
         }
         return 0;
       });

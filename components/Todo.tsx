@@ -80,6 +80,7 @@ export const Todo = ({ data }: { data: Movie[] }) => {
       imdbrating: item.imdbRating,
       imdbid: item.imdbID,
       runtime: item.Runtime,
+      country: item.Country,
       added: Date.now().toString(),
       watched: false,
     }));
