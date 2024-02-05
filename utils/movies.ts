@@ -1,10 +1,7 @@
+import { Preference } from "@/components/Todo";
 import { Movie } from "./data";
-import { PREFERENCE_ITEMS } from "./usePreference";
 
-export const sortedMovies = (
-  movies: Movie[],
-  preference: (typeof PREFERENCE_ITEMS)[number],
-) => {
+export const sortedMovies = (movies: Movie[], preference: Preference) => {
   switch (preference) {
     case "Last added":
       return movies.sort((a, b) => {

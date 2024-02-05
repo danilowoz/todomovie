@@ -4,6 +4,16 @@ import MovieItem from "./Movie";
 import { motion, AnimatePresence } from "framer-motion";
 import { Movie } from "@/utils/data";
 
+const EXIT = {
+  x: 100,
+  opacity: 0,
+};
+
+const TRANSITION = {
+  duration: 0.5,
+  ease: [0.43, 0.13, 0.23, 0.96],
+};
+
 export const Movies = ({
   data,
   onToggleMovie,
@@ -38,6 +48,8 @@ export const Movies = ({
         <AnimatePresence>
           {unwatchedMovies.map((movie) => (
             <MovieItem
+              exit={EXIT}
+              transition={TRANSITION}
               toggleWatched={() => onToggleMovie(movie.imdbid)}
               deleteMovie={() => onDeleteMovie(movie.imdbid)}
               data={movie}
@@ -49,15 +61,17 @@ export const Movies = ({
           {watchedMovies.length > 0 && (
             <>
               <motion.p
-                exit={{ opacity: 0, y: 30 }}
+                exit={EXIT}
+                transition={TRANSITION}
                 layout
                 className="movies-watched"
-                transition={{ duration: 0.2 }}
               >
                 Watched
               </motion.p>
               {watchedMovies.map((movie) => (
                 <MovieItem
+                  exit={EXIT}
+                  transition={TRANSITION}
                   toggleWatched={() => onToggleMovie(movie.imdbid)}
                   deleteMovie={() => onDeleteMovie(movie.imdbid)}
                   data={movie}

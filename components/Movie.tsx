@@ -1,18 +1,21 @@
 import { Movie } from "@/utils/data";
 import React, { useState, useEffect } from "react";
 import "./movie.css";
-// import Tooltip from './tooltip';
-import { motion, Reorder, AnimatePresence } from "framer-motion";
+import { motion, AnimationProps } from "framer-motion";
 import { Tooltip } from "./Tooltip";
 
 export const MovieItem = ({
   data,
   watched,
+  exit,
+  transition,
   toggleWatched,
   deleteMovie,
 }: {
   data: Movie;
   watched: boolean;
+  exit: AnimationProps["exit"];
+  transition: AnimationProps["transition"];
   toggleWatched: (imdbid: string) => void;
   deleteMovie: (imdbid: string) => void;
 }) => {
@@ -37,8 +40,8 @@ export const MovieItem = ({
   return (
     <motion.li
       layout
-      exit={{ opacity: 0, y: 30 }}
-      transition={{ duration: 0.2 }}
+      exit={exit}
+      transition={transition}
       className={`movie-item ${check || watched ? "movie-item__watched" : ""} ${
         check ? "movie-item__checked" : ""
       }`}
