@@ -1,12 +1,10 @@
-import { cookies } from "next/headers";
-
+import { getUserID } from "@/utils/data";
 import "./credits.css";
 import Link from "next/link";
 
-const cookieStore = cookies();
-let userId = cookieStore.get("user-id")?.value;
-
 export default async function Credits() {
+  const userId = await getUserID();
+
   return (
     <div className="credits">
       <Link className="credits__back button" href="/">
@@ -39,10 +37,12 @@ export default async function Credits() {
           <td>Danilo Woznica</td>
         </tr>
 
-        <tr>
-          <td>You as User-id</td>
-          <td>{userId}</td>
-        </tr>
+        {userId && (
+          <tr>
+            <td>You as User-id</td>
+            <td>{userId}</td>
+          </tr>
+        )}
 
         <tr>
           <td>GitHub</td>
@@ -74,7 +74,7 @@ export default async function Credits() {
 
         <tr>
           <td>Database</td>
-          <td>Vercel Postgresql</td>
+          <td>Vercel Postgres</td>
         </tr>
 
         <tr>

@@ -51,7 +51,7 @@ export const Search = ({
     timer.current = setTimeout(() => {
       fetchMovies();
     }, 500);
-  }, [query]);
+  }, [query, data]);
 
   async function addMovieToStore(imdbID: string) {
     try {

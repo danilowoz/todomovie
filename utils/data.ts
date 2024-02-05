@@ -20,12 +20,12 @@ export type Movie = {
   added: string;
 };
 
-const getUserID = async () => {
+export const getUserID = async () => {
   const cookieStore = cookies();
   let userId = cookieStore.get("user-id")?.value;
 
   if (!userId) {
-    throw new Error("User ID not found");
+    return null;
   }
 
   return userId;
@@ -144,7 +144,7 @@ export const getMovies = async (): Promise<Movie[]> => {
     }
 
     const movies =
-      await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesIDs});`;
+      await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesIDs as unknown as string});`;
 
     return movies.rows.map((m) => ({
       ...m,
