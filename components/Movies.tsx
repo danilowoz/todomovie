@@ -5,12 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Movie } from "@/utils/data";
 
 const EXIT = {
-  x: 100,
+  y: 30,
   opacity: 0,
 };
 
 const TRANSITION = {
-  duration: 0.5,
+  duration: 0.3,
   ease: [0.43, 0.13, 0.23, 0.96],
 };
 

@@ -16,42 +16,42 @@
 
   height: var(--header-height);
   display: flex;
+}
 
-  & h1 {
-    font-family: var(--font-heading);
-    color: var(--gray-12);
-    font-size: var(--size-xlarge);
-    font-weight: normal;
+.app-header_title h1 {
+  font-family: var(--font-heading);
+  color: var(--gray-12);
+  font-size: var(--size-xlarge);
+  font-weight: normal;
 
-    line-height: 1;
-    letter-spacing: 4px;
+  line-height: 1;
+  letter-spacing: 4px;
 
-    margin-left: calc(var(--step-width) * 2);
+  margin-left: calc(var(--step-width) * 2);
 
-    text-shadow:
-      0px 1px var(--brand-color-red),
-      -2px -1px var(--brand-color-blue),
-      1px 0px var(--brand-color-green);
-    position: relative;
-  }
+  text-shadow:
+    0px 1px var(--brand-color-red),
+    -2px -1px var(--brand-color-blue),
+    1px 0px var(--brand-color-green);
+  position: relative;
+}
 
-  & span {
-    display: inline-block;
-    text-shadow: none;
-    letter-spacing: 0px;
-    position: absolute;
-    left: 0;
-    transform: translateX(calc(-100% - 4px));
-  }
+.app-header_title h1 span {
+  display: inline-block;
+  text-shadow: none;
+  letter-spacing: 0px;
+  position: absolute;
+  left: 0;
+  transform: translateX(calc(-100% - 4px));
+}
 
-  & p {
-    font-weight: 300;
-    font-weight: normal;
-    font-size: var(--size-normal);
+.app-header_title p {
+  font-weight: 300;
+  font-weight: normal;
+  font-size: var(--size-normal);
 
-    color: var(--gray-11);
-    margin-left: calc(var(--step-width) * 2);
-  }
+  color: var(--gray-11);
+  margin-left: calc(var(--step-width) * 2);
 }
 
 @media screen and (min-width: 1024px) {
