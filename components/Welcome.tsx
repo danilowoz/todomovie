@@ -12,8 +12,8 @@ export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
 
         <div className="welcome-text">
           <h1>
-            This is the new home of your movie list! Search, sort, and don't
-            skip a single film.
+            This is the new home of your movie list! Search, sort, and
+            don&apos;t skip a single film.
           </h1>
           <p>
             Not sure where to start? Start searching or check out the list of

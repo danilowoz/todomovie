@@ -3,6 +3,7 @@ import "./search.css";
 import { MovieRaw, createCancellableFetch, createURL } from "../utils/fetch";
 import { Movie } from "@/utils/data";
 import { useClickOutside } from "@/utils/useClickOutside";
+import Image from "next/image";
 
 const cancellableFetch = createCancellableFetch();
 
@@ -190,7 +191,7 @@ export const Search = ({
                   </div>
 
                   <div className="app-search_poster--shadow">
-                    <img src={result.Poster} alt={result.Title} />
+                    <Image src={result.Poster} alt={result.Title} />
                   </div>
                 </div>
               );
