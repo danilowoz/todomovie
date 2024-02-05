@@ -1,6 +1,6 @@
 import "./welcome.css";
 
-export const Welcome = ({ onAddMovies }: { onAddMovies: () => void }) => {
+export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
   return (
     <div className="container-padding welcome">
       <div className="welcome-image">
@@ -21,7 +21,7 @@ export const Welcome = ({ onAddMovies }: { onAddMovies: () => void }) => {
           </p>
 
           <div>
-            <button onClick={onAddMovies} className="button button-primary">
+            <button onClick={onSetMovies} className="button button-primary">
               <svg
                 width="15"
                 height="15"

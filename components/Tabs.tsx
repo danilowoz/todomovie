@@ -1,15 +1,16 @@
 "use client";
 
-import { CSSProperties, useEffect, useLayoutEffect, useState } from "react";
 import "./tabs.css";
-import {
-  PREFERENCE_ITEMS,
-  Preference,
-  usePreference,
-} from "@/utils/usePreference";
+import { CSSProperties, useLayoutEffect, useState } from "react";
+import { PREFERENCE_ITEMS, Preference } from "@/utils/usePreference";
 
-export const Tabs = () => {
-  const [preference, setPreference] = usePreference();
+export const Tabs = ({
+  current,
+  setCurrent,
+}: {
+  current: Preference;
+  setCurrent: (current: Preference) => void;
+}) => {
   const [leftPosition, setLeftPosition] = useState<number | undefined>();
   const [rightPosition, setRightPosition] = useState<number | undefined>();
 
@@ -31,19 +32,19 @@ export const Tabs = () => {
   }: {
     currentTarget: HTMLButtonElement;
   }) {
-    setPreference(currentTarget.innerText as Preference);
+    setCurrent(currentTarget.innerText as Preference);
     setPosition({ currentTarget });
   }
 
   useLayoutEffect(() => {
     const element: HTMLButtonElement | null = document.querySelector(
-      `.app-nav_item[data-tab-name="${preference}"]`,
+      `.app-nav_item[data-tab-name="${current}"]`,
     );
 
     if (element) {
       setPosition({ currentTarget: element });
     }
-  }, [preference]);
+  }, [current]);
 
   return (
     <div className="app-nav_container">
@@ -62,7 +63,7 @@ export const Tabs = () => {
           <button
             key={item}
             onClick={setActiveItem}
-            className={`app-nav_item ${preference === item ? "active" : ""}`}
+            className={`app-nav_item ${current === item ? "active" : ""}`}
             data-tab-name={item}
           >
             {item}

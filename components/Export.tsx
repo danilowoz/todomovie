@@ -31,9 +31,6 @@ export const Export = ({ data }: { data: Movie[] }) => {
   const [clicked, setClicked] = useState(false);
   const [slideOut, setSlideOut] = useState(false);
 
-  const [preference] = usePreference();
-  const movies = sortedMovies(data, preference);
-
   //   const { attributes } = useTooltip({
   //     delay: 400,
   //     text: "Export to markdown",
@@ -51,7 +48,7 @@ export const Export = ({ data }: { data: Movie[] }) => {
       setClicked(false);
     }, 3000);
 
-    exportAsMarkdown(movies);
+    exportAsMarkdown(data);
   };
 
   return (
