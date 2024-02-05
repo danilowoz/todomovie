@@ -191,7 +191,7 @@ export const Search = ({
                   </div>
 
                   <div className="app-search_poster--shadow">
-                    <Image src={result.Poster} alt={result.Title} />
+                    <img src={result.Poster} alt={result.Title} />
                   </div>
                 </div>
               );

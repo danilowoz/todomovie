@@ -6,17 +6,20 @@ import { Export } from "@/components/Export";
 import { Movies } from "@/components/Movies";
 import { Search } from "@/components/Search";
 import { Tabs } from "@/components/Tabs";
-import { usePreference } from "@/utils/usePreference";
 import { sortedMovies } from "@/utils/movies";
-import { useOptimistic, startTransition } from "react";
+import { useOptimistic, startTransition, useState } from "react";
 
 type OptimisticAction =
   | { action: "toggle" | "delete"; id: string }
   | { action: "set"; payload: Movie[] }
   | { action: "add"; payload: Movie };
 
+export const PREFERENCE_ITEMS = ["Rate", "Last added", "Year"] as const;
+export type Preference = (typeof PREFERENCE_ITEMS)[number];
+
 export const Todo = ({ data }: { data: Movie[] }) => {
-  const [preference, setPreference] = usePreference();
+  // TODO: make it url based
+  const [preference, setPreference] = useState<Preference>(PREFERENCE_ITEMS[0]);
 
   const [optimistic, setOptimistic] = useOptimistic<Movie[], OptimisticAction>(
     data,
@@ -98,7 +101,11 @@ export const Todo = ({ data }: { data: Movie[] }) => {
 
   return (
     <>
-      <Tabs current={preference} setCurrent={setPreference} />
+      <Tabs
+        items={PREFERENCE_ITEMS}
+        current={preference}
+        setCurrent={setPreference}
+      />
       <Export data={movies} />
       <Search data={movies} onAddMovie={handleAddMovie} />
       <Movies

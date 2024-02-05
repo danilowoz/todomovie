@@ -1,13 +1,15 @@
 "use client";
 
+import { Preference } from "./Todo";
 import "./tabs.css";
 import { CSSProperties, useLayoutEffect, useState } from "react";
-import { PREFERENCE_ITEMS, Preference } from "@/utils/usePreference";
 
 export const Tabs = ({
   current,
   setCurrent,
+  items,
 }: {
+  items: readonly Preference[];
   current: Preference;
   setCurrent: (current: Preference) => void;
 }) => {
@@ -59,7 +61,7 @@ export const Tabs = ({
             : {}
         }
       >
-        {PREFERENCE_ITEMS.map((item) => (
+        {items.map((item) => (
           <button
             key={item}
             onClick={setActiveItem}

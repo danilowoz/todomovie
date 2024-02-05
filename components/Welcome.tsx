@@ -1,10 +1,11 @@
+import Image from "next/image";
 import "./welcome.css";
 
 export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
   return (
     <div className="container-padding welcome">
       <div className="welcome-image">
-        <img src="/welcome.png" alt="welcome" />
+        <Image width={328} height={326} src="/welcome.png" alt="welcome" />
       </div>
 
       <div className="welcome-content">

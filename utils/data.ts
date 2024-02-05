@@ -24,22 +24,24 @@ export const getUserID = async () => {
   const cookieStore = cookies();
   let userId = cookieStore.get("user-id")?.value;
 
-  if (!userId) {
-    return null;
-  }
-
   return userId;
 };
 
 const ensureUserID = async () => {
   try {
-    return await getUserID();
-  } catch {
-    const cookieStore = cookies();
-    const userId = uuidv4();
-    cookieStore.set("user-id", userId);
+    const userID = await getUserID();
 
-    return userId;
+    if (!userID) {
+      const cookieStore = cookies();
+      const userId = uuidv4();
+      cookieStore.set("user-id", userId);
+
+      return userId;
+    }
+
+    return userID;
+  } catch {
+    return null;
   }
 };
 
@@ -79,14 +81,17 @@ export const insertMovies = async (movies: Omit<Movie, "added">[]) => {
 export const ensureDatabase = async () => {
   try {
     // await sql`DROP TABLE IF EXISTS users;`;
-    await sql`CREATE TABLE IF NOT EXISTS users (
+    console.log(
+      await sql`CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(36) PRIMARY KEY,
           moviesIds VARCHAR(355)[],
           watchedMoviesIds VARCHAR(355)[]
-      );`;
+      );`,
+    );
 
     // await sql`DROP TABLE IF EXISTS movies;`;
-    await sql`CREATE TABLE IF NOT EXISTS movies (
+    console.log(
+      await sql`CREATE TABLE IF NOT EXISTS movies (
         imdbid VARCHAR(355) PRIMARY KEY,
         title VARCHAR(355) NOT NULL,
         year VARCHAR(4),
@@ -98,7 +103,8 @@ export const ensureDatabase = async () => {
         genre VARCHAR(355),
         added VARCHAR(355)
       );
-`;
+`,
+    );
   } catch (error) {
     console.log(error);
   }
