@@ -51,6 +51,7 @@ export const MovieItem = ({
           onClick={handleCheckClick}
         >
           <Tooltip
+            delay={300}
             trigger={
               <img
                 src={data.watched ? "/eye.svg" : "/check.svg"}
@@ -66,7 +67,7 @@ export const MovieItem = ({
           className="button movie-item_actions"
           onClick={() => deleteMovie(data.imdbid)}
         >
-          <Tooltip trigger={<img src="/delete.svg" alt="Delete" />}>
+          <Tooltip delay={300} trigger={<img src="/delete.svg" alt="Delete" />}>
             Delete
           </Tooltip>
         </button>

@@ -9,7 +9,7 @@ export const Header: React.FC = () => {
       <div className="app-header_title">
         <div className="container">
           <h1>
-            <span>Todo</span>MOVIE
+            <span>TODO</span>Movie
           </h1>
           <p>Don&apos;t skip one</p>
         </div>

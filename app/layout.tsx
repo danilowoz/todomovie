@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Stage } from "@/components/Stage";
 import Link from "next/link";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const koulen = Koulen({
   weight: "400",
@@ -36,6 +37,8 @@ export default function RootLayout({
           <main>
             <Stage>
               {children}
+
+              <SpeedInsights />
 
               <div style={{ flex: 1 }} />
 
