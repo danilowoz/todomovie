@@ -1,38 +1,44 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
 import { MovieRaw, createCancellableFetch, createURL } from "../utils/fetch";
-import { Movie, insertMovie } from "@/utils/data";
+import { Movie } from "@/utils/data";
+import { useClickOutside } from "@/utils/useClickOutside";
 
 const cancellableFetch = createCancellableFetch();
 
-export const Search = () => {
+export const Search = ({
+  data,
+  onAddMovie,
+}: {
+  data: Movie[];
+  onAddMovie: (movie: Movie) => void;
+}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<MovieRaw[]>([]);
   const [indexSelected, setIndexSelected] = useState(0);
   const timer = useRef<NodeJS.Timeout>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(containerRef, resetInterfaceState);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         if (!query) return;
 
-        const data = await cancellableFetch(
+        const rawMovies = await cancellableFetch<{ Search: MovieRaw[] }>(
           createURL({ search: query.trim() }),
         );
 
         setResults(
-          data.Search.slice(0, 6) ?? [],
-          // data.Search
-          //   ? data.Search.filter(
-          //       (movie) => !$movies.find((m) => m.imdbID === movie.imdbID),
-          //     ).slice(0, 6)
-          //   : [],
+          rawMovies.Search
+            ? rawMovies.Search.filter(
+                (rawItem) => !data.find((m) => m.imdbid === rawItem.imdbID),
+              ).slice(0, 6)
+            : [],
         );
       } catch (error) {
-        // TODO
         console.error(error);
       }
     };
@@ -52,7 +58,7 @@ export const Search = () => {
         (res) => res.json(),
       );
 
-      await insertMovie({
+      onAddMovie({
         imdbrating: fullMovie.imdbRating,
         genre: fullMovie.Genre,
         plot: fullMovie.Plot,
@@ -62,9 +68,9 @@ export const Search = () => {
         year: fullMovie.Year,
         imdbid: fullMovie.imdbID,
         director: fullMovie.Director,
+        added: new Date().toString(),
       });
     } catch (error) {
-      // TODO
       console.error(error);
     }
   }
@@ -135,11 +141,7 @@ export const Search = () => {
   }, [keyHandler]);
 
   return (
-    <div
-      className="container-padding"
-      //   use:clickOutside
-      //   on:click_outside={resetInterfaceState}
-    >
+    <div className="container-padding" ref={containerRef}>
       <input
         ref={inputRef}
         className="app-search"

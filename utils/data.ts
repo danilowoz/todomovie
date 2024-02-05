@@ -76,17 +76,6 @@ export const insertMovies = async (movies: Omit<Movie, "added">[]) => {
   }
 };
 
-export const insertMovie = async (movie: Omit<Movie, "added">) => {
-  try {
-    await ensureDatabase();
-    await addMovie(movie);
-
-    revalidatePath("/");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const ensureDatabase = async () => {
   try {
     // await sql`DROP TABLE IF EXISTS users;`;

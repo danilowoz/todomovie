@@ -33,7 +33,7 @@ export function createCancellableFetch() {
   let controller = new AbortController();
   let signal = controller.signal;
 
-  return async function mainCancellableFetch(url: URL) {
+  return async function mainCancellableFetch<Response = any>(url: URL) {
     controller.abort();
 
     // reassign signal
@@ -43,6 +43,6 @@ export function createCancellableFetch() {
     const response = await fetch(url, { signal });
     const data = await response.json();
 
-    return data;
+    return data as Response;
   };
 }

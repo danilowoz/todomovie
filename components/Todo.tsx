@@ -12,7 +12,8 @@ import { useOptimistic, startTransition } from "react";
 
 type OptimisticAction =
   | { action: "toggle" | "delete"; id: string }
-  | { action: "set"; payload: Movie[] };
+  | { action: "set"; payload: Movie[] }
+  | { action: "add"; payload: Movie };
 
 export const Todo = ({ data }: { data: Movie[] }) => {
   const [preference, setPreference] = usePreference();
@@ -21,6 +22,10 @@ export const Todo = ({ data }: { data: Movie[] }) => {
     data,
     (prevData, action) => {
       switch (action.action) {
+        case "add": {
+          return [...prevData, action.payload];
+        }
+
         case "set": {
           return action.payload;
         }
@@ -83,11 +88,19 @@ export const Todo = ({ data }: { data: Movie[] }) => {
     insertMovies(state);
   }
 
+  function handleAddMovie(movie: Movie) {
+    startTransition(() => {
+      setOptimistic({ action: "add", payload: movie });
+    });
+
+    insertMovies([movie]);
+  }
+
   return (
     <>
       <Tabs current={preference} setCurrent={setPreference} />
       <Export data={movies} />
-      <Search />
+      <Search data={movies} onAddMovie={handleAddMovie} />
       <Movies
         data={movies}
         onSetMovies={handleSetMovies}
