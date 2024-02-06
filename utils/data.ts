@@ -48,10 +48,10 @@ const addMovie = async (movie: Omit<Movie, "added">) => {
   const userID = await ensureUserID();
 
   await sql`
-    INSERT INTO users (id, moviesIds) 
+    INSERT INTO users (id, moviesids) 
     VALUES (${userID}, ARRAY[${movie.imdbid}])
     ON CONFLICT (id) 
-    DO UPDATE SET moviesIds = array_cat(users.moviesIds, ARRAY[${movie.imdbid}]);
+    DO UPDATE SET moviesids = array_cat(users.moviesids, ARRAY[${movie.imdbid}]);
       `;
 
   await sql`
@@ -140,19 +140,19 @@ const getWatchedMovieIDS = async (): Promise<string[]> => {
 
 export const getMovies = async (): Promise<Movie[]> => {
   try {
-    const moviesIDs = await getMovieIDS();
-    const watchedMoviesIds = await getWatchedMovieIDS();
+    const moviesiDs = await getMovieIDS();
+    const watchedmoviesids = await getWatchedMovieIDS();
 
-    if (moviesIDs.length === 0 && watchedMoviesIds.length === 0) {
+    if (moviesiDs.length === 0 && watchedmoviesids.length === 0) {
       return [];
     }
 
     const movies =
-      await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesIDs as unknown as string});`;
+      await sql<Movie>`SELECT * FROM movies WHERE imdbid = ANY(${moviesiDs as unknown as string});`;
 
     return movies.rows.map((m) => ({
       ...m,
-      watched: watchedMoviesIds.includes(m.imdbid),
+      watched: watchedmoviesids.includes(m.imdbid),
     }));
   } catch (error) {
     console.log(error);
@@ -166,13 +166,13 @@ export const deleteMovie = async (imdbid: string) => {
 
     await sql`
       UPDATE users
-      SET moviesIds = array_remove(moviesIds, ${imdbid})
+      SET moviesids = array_remove(moviesids, ${imdbid})
       WHERE id = ${userID};
     `;
 
     await sql`
       UPDATE users
-      SET watchedMoviesIds = array_remove(watchedMoviesIds, ${imdbid})
+      SET watchedmoviesids = array_remove(watchedmoviesids, ${imdbid})
       WHERE id = ${userID};
     `;
 
@@ -185,18 +185,18 @@ export const deleteMovie = async (imdbid: string) => {
 export const toggleWatched = async (imdbid: string) => {
   try {
     const userID = await getUserID();
-    const watchedMoviesIds = await getWatchedMovieIDS();
+    const watchedmoviesids = await getWatchedMovieIDS();
 
-    const watched = watchedMoviesIds.includes(imdbid);
+    const watched = watchedmoviesids.includes(imdbid);
 
     if (watched) {
       await sql`UPDATE users
-        SET watchedMoviesIds = array_remove(watchedMoviesIds, ${imdbid})
+        SET watchedmoviesids = array_remove(watchedmoviesids, ${imdbid})
     WHERE users.id = ${userID};
     `;
     } else {
       await sql`UPDATE users
-    SET watchedMoviesIds = array_cat(users.watchedMoviesIds, ARRAY[${imdbid}])
+    SET watchedmoviesids = array_cat(users.watchedmoviesids, ARRAY[${imdbid}])
     WHERE users.id = ${userID};
     `;
     }
