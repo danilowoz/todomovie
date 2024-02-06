@@ -42,7 +42,7 @@ const ensureUserID = async () => {
 };
 
 const addMovie = async (movie: Omit<Movie, "added">) => {
-  await ensureDatabase();
+  // await ensureDatabase();
 
   const userID = await ensureUserID();
 
@@ -78,7 +78,7 @@ export const ensureDatabase = async () => {
   try {
     await sql`SELECT * FROM users LIMIT 1;`;
   } catch (error) {
-    // await sql`DROP TABLE IF EXISTS users;`;
+    await sql`DROP TABLE IF EXISTS users;`;
     console.log(
       await sql`CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(36) PRIMARY KEY,
@@ -87,7 +87,7 @@ export const ensureDatabase = async () => {
       );`,
     );
 
-    // await sql`DROP TABLE IF EXISTS movies;`;
+    await sql`DROP TABLE IF EXISTS movies;`;
     console.log(
       await sql`CREATE TABLE IF NOT EXISTS movies (
         imdbid VARCHAR(355) PRIMARY KEY,
@@ -109,7 +109,7 @@ export const ensureDatabase = async () => {
 
 const getMovieIDS = async (): Promise<string[]> => {
   try {
-    await ensureDatabase();
+    // await ensureDatabase();
     const userID = await getUserID();
 
     const resultMovies = await sql<{ moviesids: string[] }>`
@@ -124,7 +124,7 @@ const getMovieIDS = async (): Promise<string[]> => {
 
 const getWatchedMovieIDS = async (): Promise<string[]> => {
   try {
-    await ensureDatabase();
+    // await ensureDatabase();
     const userID = await getUserID();
 
     const resultMovies = await sql<{ watchedmoviesids: string[] }>`
