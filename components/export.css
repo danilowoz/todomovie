@@ -24,11 +24,14 @@
   position: fixed;
   bottom: var(--space-3);
   left: 50%;
+  z-index: 9999999;
+
   transform: translateX(-50%);
   background: var(--gray-12);
   color: var(--gray-1);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--rounded);
+  box-shadow: var(--shadow-action);
 
   animation: slideIn 500ms var(--t-func);
   display: flex;

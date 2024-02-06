@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/third-parties": "^14.1.0",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@types/uuid": "^9.0.8",
     "@vercel/postgres": "^0.7.2",

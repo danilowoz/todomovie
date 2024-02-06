@@ -24,10 +24,17 @@ export const Search = ({
   useClickOutside(containerRef, resetInterfaceState);
 
   useEffect(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    if (!query) {
+      setResults([]);
+      return;
+    }
+
     const fetchMovies = async () => {
       try {
-        if (!query) return;
-
         const rawMovies = await cancellableFetch<{ Search: MovieRaw[] }>(
           createURL({ search: query.trim() }),
         );
@@ -43,10 +50,6 @@ export const Search = ({
         console.error(error);
       }
     };
-
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
 
     timer.current = setTimeout(() => {
       fetchMovies();
@@ -172,9 +175,9 @@ export const Search = ({
                   }}
                 >
                   {result.Title.split(new RegExp(`(${query})`, "gi")).map(
-                    (part) => (
+                    (part, index) => (
                       <span
-                        key={part}
+                        key={part + index}
                         className={part === query ? "query" : ""}
                       >
                         {part}

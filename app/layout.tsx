@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Stage } from "@/components/Stage";
 import Link from "next/link";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const koulen = Koulen({
   weight: "400",
@@ -39,6 +40,7 @@ export default function RootLayout({
               {children}
 
               <SpeedInsights />
+              <GoogleAnalytics gaId="G-8EENT5365Z" />
 
               <div style={{ flex: 1 }} />
 

@@ -32,6 +32,7 @@
   list-style: none;
   margin: 0;
   padding-bottom: var(--space-4);
+  will-change: transform, opacity;
 
   &:not(.movie-item__watched):hover {
     *:not(.movie-item_title) {

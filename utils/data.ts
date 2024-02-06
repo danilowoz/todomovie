@@ -43,6 +43,8 @@ const ensureUserID = async () => {
 };
 
 const addMovie = async (movie: Omit<Movie, "added">) => {
+  await ensureDatabase();
+
   const userID = await ensureUserID();
 
   await sql`
@@ -63,8 +65,6 @@ const addMovie = async (movie: Omit<Movie, "added">) => {
 
 export const insertMovies = async (movies: Omit<Movie, "added">[]) => {
   try {
-    await ensureDatabase();
-
     for (const movie of movies) {
       await addMovie(movie);
     }
@@ -77,12 +77,14 @@ export const insertMovies = async (movies: Omit<Movie, "added">[]) => {
 
 export const ensureDatabase = async () => {
   try {
+    await sql`SELECT * FROM users LIMIT 1;`;
+  } catch (error) {
     // await sql`DROP TABLE IF EXISTS users;`;
     console.log(
       await sql`CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(36) PRIMARY KEY,
-          moviesIds VARCHAR(355)[],
-          watchedMoviesIds VARCHAR(355)[]
+          moviesids VARCHAR(355)[],
+          watchedmoviesids VARCHAR(355)[]
       );`,
     );
 
@@ -103,8 +105,6 @@ export const ensureDatabase = async () => {
       );
 `,
     );
-  } catch (error) {
-    console.log(error);
   }
 };
 
@@ -114,7 +114,7 @@ const getMovieIDS = async (): Promise<string[]> => {
     const userID = await getUserID();
 
     const resultMovies = await sql<{ moviesids: string[] }>`
-      SELECT moviesIds FROM users WHERE id = ${userID};
+      SELECT moviesids FROM users WHERE id = ${userID};
     `;
     return resultMovies.rows[0]?.moviesids ?? [];
   } catch (error) {
@@ -129,7 +129,7 @@ const getWatchedMovieIDS = async (): Promise<string[]> => {
     const userID = await getUserID();
 
     const resultMovies = await sql<{ watchedmoviesids: string[] }>`
-      SELECT watchedMoviesIds FROM users WHERE id = ${userID};
+      SELECT watchedmoviesids FROM users WHERE id = ${userID};
     `;
     return resultMovies.rows[0]?.watchedmoviesids ?? [];
   } catch (error) {

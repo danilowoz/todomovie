@@ -59,7 +59,7 @@
 
   transition: color var(--t-speed) var(--t-func);
 
-  &:hover:not(.app-nav_item--active) {
+  &:hover:not(.active) {
     color: var(--gray-11);
   }
 

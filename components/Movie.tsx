@@ -15,8 +15,8 @@ export const MovieItem = ({
 }: {
   data: Movie;
   watched: boolean;
-  exit: AnimationProps["exit"];
-  transition: AnimationProps["transition"];
+  exit?: AnimationProps["exit"];
+  transition?: AnimationProps["transition"];
   toggleWatched: (imdbid: string) => void;
   deleteMovie: (imdbid: string) => void;
 }) => {
