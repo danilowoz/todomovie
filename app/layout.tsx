@@ -65,7 +65,7 @@ export default function RootLayout({
                   </Link>
 
                   <a
-                    href="https://github.com/danilowoz/todo-movie"
+                    href="https://github.com/danilowoz/todomovie"
                     target="_blank"
                   >
                     <svg
