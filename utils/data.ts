@@ -9,6 +9,7 @@ export type Movie = {
   title: string;
   imdbid: string;
   year: string;
+  released: string;
   poster: string;
   genre: string;
   imdbrating: string;
@@ -53,9 +54,9 @@ const addMovie = async (movie: Omit<Movie, "added">) => {
 
   await sql`
     INSERT INTO movies
-    (imdbid, title, year, poster, imdbrating, plot, runtime, director, genre, country, added)
+    (imdbid, title, year, poster, imdbrating, plot, runtime, director, released, genre, country, added)
     VALUES
-    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.genre}, ${movie.country}, ${new Date().toString()})
+    (${movie.imdbid}, ${movie.title}, ${movie.year}, ${movie.poster}, ${movie.imdbrating}, ${movie.plot}, ${movie.runtime}, ${movie.director}, ${movie.released}, ${movie.genre}, ${movie.country}, ${new Date().toString()})
     ON CONFLICT (imdbid) DO NOTHING;
   `;
 };
@@ -96,6 +97,7 @@ export const ensureDatabase = async () => {
         plot VARCHAR(355),
         runtime VARCHAR(355),
         director VARCHAR(355),
+        released VARCHAR(355),
         genre VARCHAR(355),
         country VARCHAR(355),
         added VARCHAR(355)

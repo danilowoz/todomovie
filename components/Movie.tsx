@@ -4,6 +4,7 @@ import "./movie.css";
 import { motion, AnimationProps } from "framer-motion";
 import { Tooltip } from "./Tooltip";
 import { flag } from "country-emoji";
+import { convertMinutesToHoursAndMinutes } from "@/utils/movies";
 
 export const MovieItem = ({
   data,
@@ -84,9 +85,18 @@ export const MovieItem = ({
           </h2>
 
           <p className="movie-item_metadata">by {data.director}</p>
-          <p className="movie-item_metadata">{data.runtime}</p>
+          <Tooltip
+            trigger={<p className="movie-item_metadata">{data.runtime}</p>}
+          >
+            {convertMinutesToHoursAndMinutes(
+              Number(data.runtime.replace(" min", "")),
+            )}
+          </Tooltip>
+
           <p className="movie-item_metadata only-desktop">{data.genre}</p>
-          <p className="movie-item_metadata">{data.year}</p>
+          <Tooltip trigger={<p className="movie-item_metadata">{data.year}</p>}>
+            {data.released}
+          </Tooltip>
           <p className="movie-item_metadata only-mobile">{data.imdbrating}</p>
           <p className="movie-item_metadata only-desktop">
             {data.country.split(", ").map(flag).join(" ")}

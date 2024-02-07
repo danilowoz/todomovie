@@ -32,7 +32,7 @@ export const Tabs = ({
   }: {
     currentTarget: HTMLButtonElement;
   }) {
-    setCurrent(currentTarget.innerText as Preference);
+    setCurrent(currentTarget.dataset.tabName as Preference);
     setPosition({ currentTarget });
   }
 

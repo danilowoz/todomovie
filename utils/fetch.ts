@@ -21,6 +21,7 @@ export type MovieRaw = {
   Title: string;
   imdbID: string;
   Year: string;
+  Released: string;
   Poster: string;
   Genre: string;
   imdbRating: string;

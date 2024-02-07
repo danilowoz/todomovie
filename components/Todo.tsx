@@ -75,6 +75,7 @@ export const Todo = ({ data }: { data: Movie[] }) => {
       poster: item.Poster,
       title: item.Title,
       year: item.Year,
+      released: item.Released,
       imdbrating: item.imdbRating,
       imdbid: item.imdbID,
       runtime: item.Runtime,
