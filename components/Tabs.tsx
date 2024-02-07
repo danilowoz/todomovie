@@ -1,5 +1,3 @@
-"use client";
-
 import { Preference } from "./Todo";
 import "./tabs.css";
 import { CSSProperties, useLayoutEffect, useState } from "react";
