@@ -5,9 +5,5 @@ import { Suspense } from "react";
 export default async function Home() {
   const movies = await getMovies();
 
-  return (
-    <Suspense>
-      <Todo data={movies} />
-    </Suspense>
-  );
+  return <Todo data={movies} />;
 }

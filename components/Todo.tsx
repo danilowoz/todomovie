@@ -7,9 +7,7 @@ import { Movies } from "@/components/Movies";
 import { Search } from "@/components/Search";
 import { Tabs } from "@/components/Tabs";
 import { sortedMovies } from "@/utils/movies";
-import { useOptimistic, startTransition } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useOptimistic, startTransition, useState } from "react";
 
 type OptimisticAction =
   | { action: "toggle" | "delete"; id: string }
@@ -20,15 +18,7 @@ export const PREFERENCE_ITEMS = ["Rate", "Last added", "Year"] as const;
 export type Preference = (typeof PREFERENCE_ITEMS)[number];
 
 export const Todo = ({ data }: { data: Movie[] }) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const filter = (searchParams.get("filter") as Preference) ?? "Rate";
-
-  const [preference, setPreference] = useOptimistic<Preference>(
-    PREFERENCE_ITEMS[0],
-  );
+  const [preference, setPreference] = useState<Preference>(PREFERENCE_ITEMS[0]);
   const [optimistic, setOptimistic] = useOptimistic<Movie[], OptimisticAction>(
     data,
     (prevData, action) => {
@@ -108,23 +98,12 @@ export const Todo = ({ data }: { data: Movie[] }) => {
     insertMovies([movie]);
   }
 
-  function handleFilterChange(value: Preference) {
-    startTransition(() => {
-      setPreference(value);
-
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("filter", value);
-
-      router.replace(pathname + "?" + params.toString());
-    });
-  }
-
   return (
     <>
       <Tabs
         items={PREFERENCE_ITEMS}
-        current={filter}
-        setCurrent={handleFilterChange}
+        current={preference}
+        setCurrent={setPreference}
       />
       <Export data={movies} />
       <Search data={movies} onAddMovie={handleAddMovie} />
