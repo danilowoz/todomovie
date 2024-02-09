@@ -14,7 +14,7 @@ type OptimisticAction =
   | { action: "set"; payload: Movie[] }
   | { action: "add"; payload: Movie };
 
-export const PREFERENCE_ITEMS = ["Rate", "Last added", "Year"] as const;
+export const PREFERENCE_ITEMS = ["Rating", "Last added", "Year"] as const;
 export type Preference = (typeof PREFERENCE_ITEMS)[number];
 
 export const Todo = ({ data }: { data: Movie[] }) => {

@@ -13,12 +13,12 @@ export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
 
         <div className="welcome-text">
           <h1>
-            This is the new home of your movie list! Search, sort, and
-            don&apos;t skip a single film.
+            Meet the new home of your movie watchlist! Search, sort, and
+            don&apos;t skip a single movie.
           </h1>
           <p>
-            Not sure where to start? Start searching or check out the list of
-            Best Picture Oscar-nominated movies.
+            Not sure where to start? Search for a movie or add the Best Picture
+            Oscar-nominated movies.
           </p>
 
           <div>
@@ -37,7 +37,7 @@ export const Welcome = ({ onSetMovies }: { onSetMovies: () => void }) => {
                   clipRule="evenodd"
                 />
               </svg>
-              Add Oscar-nominated
+              Add all Oscar-nominees
             </button>
           </div>
         </div>

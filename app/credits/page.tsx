@@ -39,7 +39,7 @@ export default async function Credits() {
 
         {userId && (
           <tr>
-            <td>You As User-ID</td>
+            <td>User-ID</td>
             <td>{userId}</td>
           </tr>
         )}
