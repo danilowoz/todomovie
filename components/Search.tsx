@@ -233,11 +233,27 @@ export const Search = ({
                   )}
 
                   <div className="app-search_poster">
-                    <img src={result.Poster} alt={result.Title} />
+                    <img
+                      src={result.Poster}
+                      alt={result.Title}
+                      onError={(event) => {
+                        const element = event.target as HTMLImageElement;
+
+                        element.style.display = "none";
+                      }}
+                    />
                   </div>
 
                   <div className="app-search_poster--shadow">
-                    <img src={result.Poster} alt={result.Title} />
+                    <img
+                      src={result.Poster}
+                      alt={result.Title}
+                      onError={(event) => {
+                        const element = event.target as HTMLImageElement;
+
+                        element.style.display = "none";
+                      }}
+                    />
                   </div>
                 </div>
               );
