@@ -6,7 +6,7 @@ export const sortedMovies = (movies: Movie[], preference: Preference) => {
     case "Last added":
       return movies.sort((a, b) => {
         // @ts-ignore
-        return new Date(a.added) - new Date(b.added);
+        return new Date(b.added) - new Date(a.added);
       });
 
     case "Year":
