@@ -3,3 +3,5 @@
 # TODOMovie
 
 TODOMovie is an open-source web application that serves as a todo list but for movies. With TODOMovie, you can easily organize and sort the movies you've added based on public rates, last added, and release years.
+
+[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/danilowoz/todomovie)
