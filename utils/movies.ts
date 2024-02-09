@@ -21,7 +21,7 @@ export const sortedMovies = (movies: Movie[], preference: Preference) => {
       });
 
     default:
-    case "Rate":
+    case "Rating":
       return movies.sort((a, b) => {
         const rateA = Number(a.imdbrating === "N/A" ? 0 : a.imdbrating);
         const rateB = Number(b.imdbrating === "N/A" ? 0 : b.imdbrating);
