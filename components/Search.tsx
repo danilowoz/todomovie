@@ -52,7 +52,7 @@ export const Search = ({
           response.Search
             ? response.Search.filter(
                 (rawItem) => !data.find((m) => m.imdbid === rawItem.imdbID),
-              ).slice(0, 7)
+              ).slice(0, 6)
             : [],
         );
       } catch (error) {
