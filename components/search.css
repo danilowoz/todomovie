@@ -41,6 +41,25 @@
   }
 }
 
+.app-search__container {
+  position: relative;
+
+  & .hint {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    height: var(--space-5);
+    top: 0;
+    right: var(--space-3);
+    align-items: center;
+    transition: opacity var(--t-speed) var(--t-func);
+  }
+
+  &:has(.app-search:focus-within) .hint {
+    opacity: 1;
+  }
+}
+
 .app-search_results_container {
   position: relative;
 }
@@ -113,6 +132,7 @@
     color: var(--gray-12);
   }
 }
+
 @media screen and (min-width: 768px) {
   .app-search_result {
     width: calc(100% - 144px - var(--space-1));

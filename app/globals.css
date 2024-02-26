@@ -92,6 +92,9 @@ input {
   margin: 0;
 }
 
+/**
+ * Global components
+ */
 .container {
   padding: 0 var(--space-2);
   max-width: var(--container-width);
@@ -243,5 +246,15 @@ input {
 
   .only-mobile {
     display: none;
+  }
+}
+
+.hint {
+  display: flex;
+
+  & span {
+    color: var(--gray-10);
+    font-size: var(--size-xsmall);
+    margin-left: var(--space-2);
   }
 }

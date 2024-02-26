@@ -1,3 +1,4 @@
+import { tinykeys } from "tinykeys";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
 import { MovieRaw, createCancellableFetch, createURL } from "../utils/fetch";
@@ -65,6 +66,19 @@ export const Search = ({
     }, 500);
   }, [query, data]);
 
+  useEffect(() => {
+    let unsubscribe = tinykeys(window, {
+      "$mod+KeyF": (event: KeyboardEvent) => {
+        inputRef.current?.focus();
+
+        event.preventDefault();
+      },
+    });
+    return () => {
+      unsubscribe();
+    };
+  });
+
   const addMovieToStore = useCallback(
     async (imdbID: string) => {
       try {
@@ -128,17 +142,13 @@ export const Search = ({
         }
 
         case "ArrowUp": {
-          setIndexSelected((prev) => {
-            return prev !== 0 ? prev - 1 : prev;
-          });
+          setIndexSelected((prev) => Math.max(0, prev - 1));
 
           event.preventDefault();
           break;
         }
         case "ArrowDown": {
-          setIndexSelected((prev) => {
-            return prev !== results.length - 1 ? prev + 1 : prev;
-          });
+          setIndexSelected((prev) => Math.min(results.length - 1, prev + 1));
 
           event.preventDefault();
           break;
@@ -166,14 +176,21 @@ export const Search = ({
 
   return (
     <div className="container-padding" ref={containerRef}>
-      <input
-        ref={inputRef}
-        className="app-search"
-        value={query}
-        onChange={({ target }) => setQuery(target.value)}
-        type="search"
-        placeholder="Search..."
-      />
+      <div className="app-search__container">
+        <input
+          ref={inputRef}
+          className="app-search"
+          value={query}
+          onChange={({ target }) => setQuery(target.value)}
+          type="search"
+          placeholder="Search..."
+        />
+
+        <div className="hint">
+          <span>⌘</span>
+          <span>F</span>
+        </div>
+      </div>
 
       {error && (
         <div className="app-search_results_container">

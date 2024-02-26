@@ -5,6 +5,7 @@ import { motion, AnimationProps } from "framer-motion";
 import { Tooltip } from "./Tooltip";
 import { flag } from "country-emoji";
 import { convertMinutesToHoursAndMinutes } from "@/utils/movies";
+import { classNames } from "@/utils/classNames";
 
 export const MovieItem = ({
   data,
@@ -44,9 +45,11 @@ export const MovieItem = ({
       layout
       exit={exit}
       transition={transition}
-      className={`movie-item ${check || watched ? "movie-item__watched" : ""} ${
-        check ? "movie-item__checked" : ""
-      }`}
+      className={classNames(
+        "movie-item",
+        check || watched ? "movie-item__watched" : "",
+        check ? "movie-item__checked" : "",
+      )}
     >
       <div className="movie-item_sidebar">
         <p className="movie-item_rate only-desktop">{data.imdbrating}</p>
