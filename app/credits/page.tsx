@@ -1,6 +1,7 @@
 import { getUserID } from "@/utils/data";
 import "./credits.css";
 import Link from "next/link";
+import { UserId } from "./_user-id";
 
 export default async function Credits() {
   const userId = await getUserID();
@@ -37,12 +38,7 @@ export default async function Credits() {
           <td>Danilo Woznica</td>
         </tr>
 
-        {userId && (
-          <tr>
-            <td>User-ID</td>
-            <td>{userId}</td>
-          </tr>
-        )}
+        {userId && <UserId userId={userId} />}
 
         <tr>
           <td>GitHub</td>

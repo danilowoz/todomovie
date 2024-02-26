@@ -21,11 +21,18 @@ export type Movie = {
   added: string;
 };
 
+const cookieStore = cookies();
+
 export const getUserID = async () => {
-  const cookieStore = cookies();
   let userId = cookieStore.get("user-id")?.value;
 
   return userId;
+};
+
+export const updateCookirUserId = async (newUserId: string | null) => {
+  if (newUserId) {
+    cookieStore.set("user-id", newUserId, { path: "/" });
+  }
 };
 
 const ensureUserID = async () => {

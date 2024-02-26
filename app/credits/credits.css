@@ -42,3 +42,16 @@
 .credits__back {
   margin: var(--space-2);
 }
+
+.credits_config {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  transition: color var(--t-speed) var(--t-func);
+
+  &:hover {
+    cursor: pointer;
+    color: var(--gray-11) !important;
+  }
+}
