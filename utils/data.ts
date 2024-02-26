@@ -21,9 +21,8 @@ export type Movie = {
   added: string;
 };
 
-const cookieStore = cookies();
-
 export const getUserID = async () => {
+  const cookieStore = cookies();
   let userId = cookieStore.get("user-id")?.value;
 
   return userId;
@@ -31,6 +30,7 @@ export const getUserID = async () => {
 
 export const updateCookirUserId = async (newUserId: string | null) => {
   if (newUserId) {
+    const cookieStore = cookies();
     cookieStore.set("user-id", newUserId, { path: "/" });
   }
 };
