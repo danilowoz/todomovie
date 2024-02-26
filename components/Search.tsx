@@ -1,3 +1,4 @@
+// @ts-ignore
 import { tinykeys } from "tinykeys";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./search.css";
