@@ -231,6 +231,9 @@ export const Search = ({
                   onClick={() => {
                     selectMovie(result.imdbID);
                   }}
+                  onMouseEnter={() => {
+                    setIndexSelected(index);
+                  }}
                 >
                   {result.Title.split(new RegExp(`(${query})`, "gi")).map(
                     (part, index) => (

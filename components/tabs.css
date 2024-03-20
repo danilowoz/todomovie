@@ -60,7 +60,7 @@
   transition: color var(--t-speed) var(--t-func);
 
   &:hover:not(.active) {
-    color: var(--gray-11);
+    color: var(--gray-12);
   }
 
   &.active {

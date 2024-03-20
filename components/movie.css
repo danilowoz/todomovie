@@ -83,15 +83,6 @@
     transition: opacity var(--t-speed) var(--t-func);
   }
 }
-@media (max-width: 1024px) {
-  .movie-item:not(.movie-item__watched)
-    .movie-item_actions.button.movie-item_check-button {
-    border: 1px solid var(--gray-4);
-    background: var(--gray-3);
-    color: var(--gray-12);
-    box-shadow: var(--shadow-action);
-  }
-}
 
 @media (min-width: 1024px) {
   .movie-item_actions.button {
