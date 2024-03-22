@@ -110,6 +110,7 @@
 }
 
 .app-search_result {
+  --poster-width: 130px;
   color: var(--gray-10);
   font-size: var(--size-normal);
   white-space: nowrap;
@@ -133,7 +134,7 @@
 
 @media screen and (min-width: 768px) {
   .app-search_result {
-    width: calc(100% - 144px - var(--space-1));
+    width: calc(100% - var(--poster-width) - var(--space-1));
   }
 }
 
@@ -166,10 +167,12 @@
 
     opacity: 0;
     transition: opacity var(--t-speed) ease;
-    width: 144px;
+    width: var(--poster-width);
 
     & img {
       height: 100%;
+      width: 100%;
+      object-fit: cover;
     }
   }
 
@@ -187,7 +190,7 @@
 
     & img {
       height: 100%;
-      width: 144px;
+      width: var(--poster-width);
     }
   }
 }
