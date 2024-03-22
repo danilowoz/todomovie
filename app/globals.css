@@ -17,8 +17,7 @@
   --brand-color-red: #ff0e0e;
 
   /* Typography */
-  --size-xlarge: 2rem;
-  --size-large: 1.6rem;
+  --size-large: 2rem;
   --size-normal: 0.9rem;
   --size-small: 0.8rem;
   --size-xsmall: 0.7rem;
@@ -59,7 +58,7 @@
     --container-width: 1280px;
     --header-height: 280px;
 
-    --size-xlarge: 4.484rem;
+    --size-large: 4.484rem;
     --size-normal: 1rem;
     --size-small: 0.9rem;
   }

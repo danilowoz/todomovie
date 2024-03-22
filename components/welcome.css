@@ -48,13 +48,14 @@
 
 .welcome-text {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-2);
   flex-direction: column;
+  margin-bottom: var(--space-4);
 
   & h1 {
+    font-size: var(--size-normal);
     color: var(--gray-12);
     font-weight: normal;
-    font-size: 1.2rem;
   }
 
   & p {
