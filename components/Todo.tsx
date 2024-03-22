@@ -3,7 +3,7 @@
 import oscar from "./oscar.json";
 import { Movie, deleteMovie, insertMovies, toggleWatched } from "@/utils/data";
 import { Export } from "@/components/Export";
-import { Movies } from "@/components/Movies";
+import { Main } from "@/components/Main";
 import { Search } from "@/components/Search";
 import { Tabs } from "@/components/Tabs";
 import { sortedMovies } from "@/utils/movies";
@@ -108,7 +108,7 @@ export const Todo = ({ data }: { data: Movie[] }) => {
       />
       <Export data={movies} />
       <Search data={movies} onAddMovie={handleAddMovie} />
-      <Movies
+      <Main
         data={movies}
         onSetMovies={handleSetMovies}
         onToggleMovie={handleToggleMovie}

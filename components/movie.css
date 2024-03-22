@@ -44,10 +44,8 @@
     }
   }
 
-  &:hover {
-    .movie-item_actions {
-      opacity: 1;
-    }
+  &:hover .movie-item_actions {
+    opacity: 1;
   }
 }
 

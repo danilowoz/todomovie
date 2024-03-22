@@ -55,7 +55,7 @@ export const MovieItem = ({
         <p className="movie-item_rate only-desktop">{data.imdbrating}</p>
 
         <button
-          className="button button-primary movie-item_actions movie-item_check-button"
+          className="button button-primary__mobile-only movie-item_actions"
           onClick={handleCheckClick}
         >
           <Tooltip

@@ -182,6 +182,28 @@ input {
   }
 }
 
+@media screen and (max-width: 1024px) {
+  .button.button-primary__mobile-only {
+    border: 1px solid var(--gray-4);
+    background: var(--gray-3);
+    color: var(--gray-12);
+    box-shadow: var(--shadow-action);
+
+    &:hover {
+      border: 1px solid var(--gray-5);
+      background: var(--gray-4);
+      color: var(--gray-12);
+      box-shadow: var(--shadow-action);
+    }
+
+    &:active {
+      border: 1px solid var(--gray-6);
+      background: var(--gray-5);
+      color: var(--gray-12);
+    }
+  }
+}
+
 #tooltip {
   display: none;
 

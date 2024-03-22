@@ -224,6 +224,8 @@ export const Search = ({
                 return;
               }
 
+              const regexQuery = new RegExp(`(${query})`, "gi");
+
               return (
                 <div
                   key={result.imdbID}
@@ -231,20 +233,16 @@ export const Search = ({
                   onClick={() => {
                     selectMovie(result.imdbID);
                   }}
-                  onMouseEnter={() => {
-                    setIndexSelected(index);
-                  }}
+                  onMouseEnter={() => setIndexSelected(index)}
                 >
-                  {result.Title.split(new RegExp(`(${query})`, "gi")).map(
-                    (part, index) => (
-                      <span
-                        key={part + index}
-                        className={part === query ? "query" : ""}
-                      >
-                        {part}
-                      </span>
-                    ),
-                  )}
+                  {result.Title.split(regexQuery).map((part, index) => (
+                    <span
+                      key={part + index}
+                      className={regexQuery.test(part) ? "query" : ""}
+                    >
+                      {part}
+                    </span>
+                  ))}
 
                   {result.Year && (
                     <span className="app-search_result_year">

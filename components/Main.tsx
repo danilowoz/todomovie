@@ -16,7 +16,7 @@ const TRANSITION: AnimationProps["transition"] = {
   y: { delay: 0.2 },
 };
 
-export const Movies = ({
+export const Main = ({
   data,
   onToggleMovie,
   onDeleteMovie,
